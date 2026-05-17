@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>文章 — 禧安堂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <style>
+    body { background: var(--cream); }
+    #site-nav { background: rgba(245, 239, 230, 0.96); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--gray-4); }
+
+    /* Loading state */
+    #article-app { min-height: 60vh; }
+    #article-app.loading { display: flex; align-items: center; justify-content: center; padding: 160px 24px; }
+    .loader { display: flex; flex-direction: column; align-items: center; gap: 16px; color: var(--gray-3);
+      font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; }
+    .loader::before {
+      content: ''; width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid var(--gray-4); border-top-color: var(--terracotta);
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .err-box {
+      max-width: 480px; margin: 160px auto;
+      padding: 32px; text-align: center;
+      background: #fff; border: 1px solid var(--gray-4); border-radius: 16px;
+    }
+    .err-box h3 { font-size: 18px; color: var(--plum); margin-bottom: 8px; }
+    .err-box p { font-size: 14px; color: var(--gray-2); margin-bottom: 16px; line-height: 1.7; }
+    .err-box code { background: var(--cream); padding: 2px 8px; border-radius: 4px; font-size: 12px; color: var(--terracotta); }
+
+    /* ── Article Hero ── */
+    .article-hero {
+      padding: 132px 0 48px;
+      text-align: center;
+    }
+    .article-hero-inner { max-width: 760px; margin: 0 auto; padding: 0 32px; }
+    @media (max-width: 768px) { .article-hero { padding: 108px 0 32px; } .article-hero-inner { padding: 0 24px; } }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--gray-3); text-decoration: none;
+      letter-spacing: 0.06em; margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--terracotta); }
+    .article-cat-tag {
+      display: inline-block;
+      font-family: 'Courier New', monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--honey);
+      margin-bottom: 20px;
+    }
+    .article-hero h1 {
+      font-size: clamp(32px, 4.4vw, 56px);
+      font-weight: 900;
+      color: var(--plum);
+      line-height: 1.15;
+      letter-spacing: 0.02em;
+      margin-bottom: 32px;
+    }
+    .article-meta-row {
+      display: inline-flex;
+      gap: 14px;
+      font-size: 12px; color: var(--gray-3);
+      letter-spacing: 0.06em;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .article-meta-row .dot { color: var(--gray-4); }
+
+    /* ── Cover ── */
+    .article-cover-wrap { max-width: 980px; margin: 32px auto 0; padding: 0 32px; }
+    @media (max-width: 768px) { .article-cover-wrap { padding: 0 16px; } }
+    .article-cover-frame {
+      aspect-ratio: 16/8;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .article-cover-frame.glyph-only {
+      background: var(--terracotta-light);
+    }
+    .article-cover-frame.sage { background: var(--sage-light); }
+    .article-cover-frame.honey { background: rgba(201,154,63,0.18); }
+    .article-cover-frame.plum { background: var(--plum); }
+    .article-cover-frame img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .article-cover-frame .glyph-big {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(80px, 14vw, 180px);
+      font-weight: 900;
+      color: var(--terracotta);
+      opacity: 0.55;
+      line-height: 1;
+      letter-spacing: 0.06em;
+    }
+    .article-cover-frame.sage .glyph-big { color: var(--sage); }
+    .article-cover-frame.honey .glyph-big { color: var(--honey); }
+    .article-cover-frame.plum .glyph-big { color: var(--cream); opacity: 0.9; }
+
+    /* ── Article body ── */
+    .article-body {
+      max-width: 680px; margin: 0 auto;
+      padding: 80px 32px var(--section-pad);
+    }
+    @media (max-width: 768px) { .article-body { padding: 56px 24px var(--section-pad-sm); } }
+
+    .article-body p {
+      font-size: 17px; line-height: 1.95;
+      color: var(--plum);
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
+      text-wrap: pretty;
+    }
+    .article-body h2 {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--plum);
+      margin: 48px 0 18px;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+    }
+    .article-body h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--plum);
+      margin: 36px 0 14px;
+      letter-spacing: 0.02em;
+    }
+    .article-body a {
+      color: var(--terracotta);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    .article-body strong {
+      color: var(--terracotta);
+      font-weight: 700;
+    }
+    .article-body em {
+      font-style: normal;
+      background: linear-gradient(180deg, transparent 60%, rgba(201,154,63,0.25) 60%);
+      padding: 0 3px;
+    }
+    .article-body blockquote {
+      border-left: 3px solid var(--terracotta);
+      margin: 28px 0;
+      padding: 8px 24px;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 19px;
+      color: var(--plum);
+      line-height: 1.7;
+    }
+    .article-body blockquote p { font-size: 19px; color: var(--plum); }
+    .article-body ul, .article-body ol {
+      margin: 20px 0 24px 20px;
+      padding-left: 12px;
+    }
+    .article-body ul li, .article-body ol li {
+      font-size: 17px; line-height: 1.85;
+      color: var(--plum);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .article-body ul { list-style: none; padding-left: 0; }
+    .article-body > ul > li {
+      padding-left: 24px;
+      position: relative;
+    }
+    .article-body > ul > li::before {
+      content: '';
+      position: absolute; left: 0; top: 14px;
+      width: 12px; height: 1px;
+      background: var(--terracotta);
+    }
+    .article-body hr {
+      border: none;
+      border-top: 1px solid var(--gray-4);
+      margin: 48px auto;
+      width: 80px;
+    }
+    .article-body img {
+      max-width: 100%;
+      border-radius: 12px;
+      margin: 24px 0;
+    }
+    .article-body figcaption,
+    .article-body em.caption {
+      display: block;
+      font-size: 13px;
+      color: var(--gray-3);
+      text-align: center;
+      margin-top: -16px;
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Article footer ── */
+    .article-footer {
+      max-width: 680px; margin: 0 auto;
+      padding: 0 32px var(--section-pad);
+    }
+    .signature {
+      padding: 32px 0;
+      border-top: 1px solid var(--gray-4);
+      border-bottom: 1px solid var(--gray-4);
+      display: flex; gap: 16px; align-items: center;
+    }
+    .signature .avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--terracotta-light);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 24px; font-weight: 700;
+      color: var(--terracotta);
+      overflow: hidden;
+    }
+    .signature .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .signature .meta .name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--plum);
+      margin-bottom: 4px;
+    }
+    .signature .meta p {
+      font-size: 13px;
+      color: var(--gray-2);
+      line-height: 1.5;
+    }
+
+    /* ── Next / prev ── */
+    .article-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 40px;
+    }
+    @media (max-width: 600px) { .article-nav { grid-template-columns: 1fr; } }
+    .article-nav-card {
+      padding: 24px;
+      border: 1px solid var(--gray-4);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: border-color 0.2s, transform 0.2s var(--ease-out);
+      background: #fff;
+    }
+    .article-nav-card:hover { border-color: var(--terracotta); transform: translateY(-2px); }
+    .article-nav-card .label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      margin-bottom: 8px;
+    }
+    .article-nav-card .nav-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--plum);
+      line-height: 1.4;
+    }
+    .article-nav-card.next { text-align: right; }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" aria-label="主导航">
+    <a href="../index.html" class="nav-logo"><img src="../assets/logo-recolored.png" alt="禧安堂" style="height:44px;width:auto;display:block;" /></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">首页</a></li>
+      <li><a href="../about.html">关于</a></li>
+      <li><a href="../services.html">服务</a></li>
+      <li><a href="../courses.html">课程</a></li>
+      <li><a href="../journal.html" class="active">文章</a></li>
+      <li><a href="../contact.html">联系</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-lang">EN</span>
+      <a href="../contact.html#book" class="nav-cta">预约咨询</a>
+    </div>
+  </nav>
+
+  <main>
+    <div id="article-app" class="loading">
+      <div class="loader">载入中</div>
+    </div>
+  </main>
+
+  <template id="tpl-article">
+    <header class="article-hero">
+      <div class="article-hero-inner">
+        <a href="../journal.html" class="back-link">← 返回所有文章</a>
+        <p class="article-cat-tag" data-bind="category"></p>
+        <h1 data-bind="title"></h1>
+        <div class="article-meta-row">
+          <span data-bind="author"></span>
+          <span class="dot">·</span>
+          <span data-bind="dateFmt"></span>
+          <span class="dot">·</span>
+          <span>读约 <span data-bind="readingMinutes"></span> 分钟</span>
+        </div>
+      </div>
+      <div class="article-cover-wrap">
+        <div class="article-cover-frame" id="cover-frame">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </header>
+
+    <article class="article-body" id="article-body"></article>
+
+    <div class="article-footer">
+      <div class="signature">
+        <div class="avatar" id="sig-avatar">安</div>
+        <div class="meta">
+          <p class="name" data-bind="author"></p>
+          <p>禧安堂主理人。每个节气写一封信。<a href="../contact.html#book">预约咨询</a> · <a href="../about.html">关于安妍老师</a></p>
+        </div>
+      </div>
+      <div class="article-nav" id="article-nav">
+        <!-- prev / next filled by JS -->
+      </div>
+    </div>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@14.1.3/marked.min.js"></script>
+  <script src="../assets/site.js"></script>
+  <script>
+    // ── Frontmatter parser ──
+    function parseFrontmatter(text) {
+      const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+      if (!m) return { meta: {}, body: text };
+      const meta = {};
+      m[1].split(/\r?\n/).forEach(line => {
+        const idx = line.indexOf(':');
+        if (idx > 0) {
+          const k = line.slice(0, idx).trim();
+          const v = line.slice(idx + 1).trim();
+          meta[k] = v;
+        }
+      });
+      return { meta, body: m[2] };
+    }
+
+    // ── Reading time (CJK-aware) ──
+    // Chinese typical reading speed: ~350 chars/min. English: ~220 words/min.
+    function computeReadingMinutes(body) {
+      // Strip markdown structure for cleaner count
+      const clean = body
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+        .replace(/\[[^\]]*\]\([^)]*\)/g, '$1')
+        .replace(/[#>*_`~\-]/g, '')
+        .replace(/\s+/g, ' ');
+      // CJK chars
+      const cjk = (clean.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g) || []).length;
+      // English words
+      const en = (clean.match(/[A-Za-z]+/g) || []).length;
+      const minutes = (cjk / 350) + (en / 220);
+      return Math.max(1, Math.round(minutes));
+    }
+
+    // ── Date formatter ──
+    function formatDate(iso) {
+      if (!iso) return '';
+      const parts = iso.split('-');
+      if (parts.length < 3) return iso;
+      return `${parts[0]} / ${parts[1]} / ${parts[2]}`;
+    }
+
+    // ── Cover ──
+    function renderCover(meta, frame) {
+      const variant = meta.cover || 'terracotta';
+      frame.className = 'article-cover-frame ' + variant + (!meta.coverImage ? ' glyph-only' : '');
+      frame.innerHTML = '';
+      if (meta.coverImage) {
+        const img = document.createElement('img');
+        img.src = meta.coverImage;
+        img.alt = meta.title || '';
+        frame.appendChild(img);
+      } else {
+        const span = document.createElement('span');
+        span.className = 'glyph-big';
+        span.textContent = meta.glyph || '○';
+        frame.appendChild(span);
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    }
+
+    // ── Main loader ──
+    (async () => {
+      const params = new URLSearchParams(location.search);
+      const slug = params.get('slug');
+      if (!slug) {
+        renderError('未提供文章标识 (slug)。');
+        return;
+      }
+
+      try {
+        const [mdText, indexJson] = await Promise.all([
+          fetch(`data/${slug}.md`).then(r => {
+            if (!r.ok) throw new Error('未找到文章');
+            return r.text();
+          }),
+          fetch('data/index.json').then(r => r.ok ? r.json() : []),
+        ]);
+
+        const { meta, body } = parseFrontmatter(mdText);
+        meta.slug = meta.slug || slug;
+        meta.author = meta.author || '安妍';
+        meta.dateFmt = formatDate(meta.date);
+        meta.readingMinutes = computeReadingMinutes(body);
+
+        // Render template
+        const tpl = document.getElementById('tpl-article');
+        const app = document.getElementById('article-app');
+        app.classList.remove('loading');
+        app.innerHTML = '';
+        app.appendChild(tpl.content.cloneNode(true));
+
+        // Bind
+        document.querySelectorAll('[data-bind]').forEach(el => {
+          const k = el.getAttribute('data-bind');
+          if (meta[k] !== undefined) el.textContent = meta[k];
+        });
+
+        // Cover
+        renderCover(meta, document.getElementById('cover-frame'));
+
+        // Markdown body
+        const html = marked.parse(body);
+        document.getElementById('article-body').innerHTML = html;
+
+        // Prev / next
+        const sorted = (indexJson || []).slice().sort((a, b) =>
+          (a.date || '').localeCompare(b.date || ''));
+        const idx = sorted.findIndex(a => a.slug === slug);
+        const navEl = document.getElementById('article-nav');
+        if (idx > 0) {
+          const prev = sorted[idx - 1];
+          navEl.appendChild(buildNavCard('上一篇', prev, 'prev'));
+        } else navEl.appendChild(document.createElement('div'));
+        if (idx >= 0 && idx < sorted.length - 1) {
+          const next = sorted[idx + 1];
+          navEl.appendChild(buildNavCard('下一篇', next, 'next'));
+        } else navEl.appendChild(document.createElement('div'));
+
+        // <title>
+        document.title = `${meta.title || '文章'} — 禧安堂`;
+      } catch (err) {
+        console.error(err);
+        renderError(`找不到 <code>${escapeHtml(slug)}</code> 这篇文章。`);
+      }
+    })();
+
+    function buildNavCard(label, article, dir) {
+      const a = document.createElement('a');
+      a.className = 'article-nav-card ' + dir;
+      a.href = `article.html?slug=${article.slug}`;
+      a.innerHTML = `
+        <div class="label">${label}</div>
+        <div class="nav-title">${escapeHtml(article.title)}</div>
+      `;
+      return a;
+    }
+
+    function renderError(msg) {
+      const app = document.getElementById('article-app');
+      app.classList.remove('loading');
+      app.innerHTML = `
+        <div class="err-box">
+          <h3>找不到这篇文章</h3>
+          <p>${msg}</p>
+          <a href="../journal.html" class="btn-ghost">返回文章列表</a>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

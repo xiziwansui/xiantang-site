@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>关于安妍老师 — 禧安堂</title>
+  <meta name="description" content="安妍老师不把命理当神秘学。在禧安堂，命理是一门描述人和时间关系的语言。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    /* ── About: portrait + bio ── */
+    #about-hero {
+      padding: 168px 0 96px;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 80px;
+      align-items: center;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+    @media (max-width: 900px) {
+      #about-hero { padding: 120px 0 56px; }
+      .about-hero-grid { grid-template-columns: 1fr; gap: 40px; padding: 0 24px; }
+    }
+    .about-portrait {
+      position: relative;
+      aspect-ratio: 4/5;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .about-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .about-portrait-tag {
+      position: absolute; bottom: 24px; left: 24px;
+      background: rgba(245, 239, 230, 0.92);
+      backdrop-filter: blur(8px);
+      padding: 10px 16px; border-radius: 100px;
+      font-size: 12px; letter-spacing: 0.08em; color: var(--plum);
+    }
+    .about-portrait-accent {
+      position: absolute; top: -28px; right: -28px;
+      width: 120px; height: 120px; border-radius: 50%;
+      background: var(--terracotta-light);
+      border: 1px solid rgba(194, 96, 63, 0.18);
+    }
+    .about-bio .eyebrow {
+      font-family: 'Courier New', monospace; font-size: 11px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--honey); margin-bottom: 18px;
+    }
+    .about-bio h1 {
+      font-size: clamp(36px, 4.5vw, 60px);
+      font-weight: 900; color: var(--plum);
+      line-height: 1.08; margin-bottom: 28px;
+    }
+    .about-bio h1 em { font-style: normal; color: var(--terracotta); }
+    .about-bio p {
+      font-size: 16px; color: var(--gray-2); line-height: 1.85;
+      margin-bottom: 16px; max-width: 560px;
+    }
+    .about-bio .signature {
+      margin-top: 28px;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 24px; font-weight: 500;
+      color: var(--terracotta);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Philosophy ── */
+    #philosophy { padding: var(--section-pad) 0; background: #ede7de; }
+    .phil-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: start;
+    }
+    @media (max-width: 900px) { .phil-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .phil-left h2 {
+      font-size: clamp(30px, 3.4vw, 48px);
+      color: var(--plum); margin-bottom: 12px;
+    }
+    .phil-left h2 em { font-style: normal; color: var(--terracotta); }
+    .phil-left p {
+      font-size: 16px; color: var(--gray-2); line-height: 1.85;
+      margin-bottom: 16px; max-width: var(--text-max);
+    }
+    .phil-right { display: grid; gap: 2px; }
+    .phil-card {
+      background: #fff;
+      border: 1px solid var(--gray-4);
+      padding: 28px 28px;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    .phil-card .num {
+      font-family: 'Courier New', monospace;
+      font-size: 11px; color: var(--honey);
+      letter-spacing: 0.16em;
+      padding-top: 6px;
+    }
+    .phil-card h4 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px; font-weight: 700; color: var(--plum);
+      margin-bottom: 6px;
+    }
+    .phil-card p {
+      font-size: 14px; color: var(--gray-2); line-height: 1.75;
+    }
+
+    /* ── Journey timeline ── */
+    #journey { padding: var(--section-pad) 0; background: var(--cream); }
+    .journey-header { text-align: center; margin-bottom: 56px; }
+    .journey-header h2 { font-size: clamp(28px, 3.2vw, 44px); }
+    .journey-list {
+      max-width: 760px; margin: 0 auto;
+      position: relative;
+    }
+    .journey-list::before {
+      content: ''; position: absolute;
+      left: 88px; top: 16px; bottom: 16px;
+      width: 1px; background: var(--gray-4);
+    }
+    @media (max-width: 600px) { .journey-list::before { left: 72px; } }
+    .journey-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 32px;
+      padding: 20px 0;
+      position: relative;
+    }
+    @media (max-width: 600px) { .journey-item { grid-template-columns: 64px 1fr; gap: 20px; } }
+    .journey-year {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--terracotta);
+      letter-spacing: 0.04em;
+      padding-top: 4px;
+      text-align: right;
+    }
+    .journey-content {
+      padding-left: 24px;
+      border-left: none;
+      position: relative;
+    }
+    .journey-content::before {
+      content: ''; position: absolute;
+      left: -5px; top: 12px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      border: 2px solid var(--cream);
+      box-shadow: 0 0 0 1px var(--terracotta);
+    }
+    .journey-content h4 {
+      font-size: 17px; font-weight: 700; color: var(--plum);
+      margin-bottom: 4px;
+    }
+    .journey-content p {
+      font-size: 14px; color: var(--gray-2); line-height: 1.75;
+    }
+
+    /* ── Stats / counters ── */
+    #counters {
+      padding: 80px 0; background: var(--plum);
+    }
+    .counters-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    @media (max-width: 768px) { .counters-grid { grid-template-columns: 1fr 1fr; } }
+    .counter {
+      background: rgba(245, 239, 230, 0.04);
+      padding: 36px 24px;
+      text-align: center;
+      border: 1px solid rgba(245, 239, 230, 0.07);
+    }
+    .counter-num {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 44px; font-weight: 900;
+      color: var(--cream); line-height: 1;
+    }
+    .counter-num span { color: var(--honey); font-size: 26px; }
+    .counter-label {
+      font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(245, 239, 230, 0.55);
+      margin-top: 12px;
+    }
+
+    /* ── Pillars (4 disciplines) ── */
+    #pillars { padding: var(--section-pad) 0; }
+    .pillars-header { text-align: center; margin-bottom: 56px; }
+    .pillars-header h2 { font-size: clamp(28px, 3.2vw, 44px); }
+    .pillars-header p { color: var(--gray-3); font-size: 16px; max-width: 540px; margin: 16px auto 0; }
+    .pillars-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+    }
+    @media (max-width: 900px) { .pillars-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .pillars-grid { grid-template-columns: 1fr; } }
+    .pillar-card {
+      padding: 32px 28px;
+      border: 1px solid var(--gray-4);
+      border-radius: 16px;
+      background: #fff;
+      transition: transform 0.25s var(--ease-out), box-shadow 0.25s;
+    }
+    .pillar-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(59,42,53,0.06); }
+    .pillar-card .pillar-glyph {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 38px; font-weight: 900;
+      color: var(--terracotta);
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+    .pillar-card h4 {
+      font-size: 17px; font-weight: 700; color: var(--plum);
+      margin-bottom: 8px;
+    }
+    .pillar-card .pillar-tag {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--sage); margin-bottom: 14px;
+    }
+    .pillar-card p {
+      font-size: 14px; color: var(--gray-2); line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" aria-label="主导航">
+    <a href="index.html" class="nav-logo"><img src="assets/logo-recolored.png" alt="禧安堂" style="height:44px;width:auto;display:block;" /></a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li><a href="about.html" class="active">关于</a></li>
+      <li><a href="services.html">服务</a></li>
+      <li><a href="courses.html">课程</a></li>
+      <li><a href="journal.html">文章</a></li>
+      <li><a href="contact.html">联系</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-lang">EN</span>
+      <a href="contact.html#book" class="nav-cta">预约咨询</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero / portrait -->
+    <section id="about-hero">
+      <div class="about-hero-grid">
+        <div class="about-portrait reveal">
+          <img src="uploads/anyan.jpeg" alt="安妍老师 — 禧安堂主理人" />
+          <div class="about-portrait-accent"></div>
+          <div class="about-portrait-tag">安妍 · 禧安堂主理人</div>
+        </div>
+        <div class="about-bio">
+          <p class="eyebrow reveal">关于 · About</p>
+          <h1 class="reveal reveal-delay-1">命理是一门<br /><em>可以好好聊的</em>语言。</h1>
+          <p class="reveal reveal-delay-2">
+            我是安妍。我不把命理当神秘学，我把它当成一套描述人和时间关系的工具——
+            紫微斗数看的是结构，八字看的是质地，风水看的是场域。
+          </p>
+          <p class="reveal reveal-delay-2">
+            这些工具的价值，不在于告诉你命运会怎样，而在于帮你看清楚当下，
+            让你在做选择的时候，多一点底气。
+          </p>
+          <p class="reveal reveal-delay-3">
+            我的工作不是预言，是翻译——把你命盘里那些看似模糊的信号，
+            翻译成你听得懂、用得上的语言。聊到最后，决定还是你来做。
+          </p>
+          <p class="signature reveal reveal-delay-4">— 安妍</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section id="philosophy">
+      <div class="container">
+        <div class="phil-grid">
+          <div class="phil-left">
+            <p class="section-label reveal">我的工作方式</p>
+            <h2 class="reveal reveal-delay-1">不预言，<br /><em>只翻译</em>。</h2>
+            <p class="reveal reveal-delay-2">
+              很多人来找我之前，对命理的印象是「准不准」「灵不灵」。
+              我希望我们在见面之前先把这件事说清楚——
+            </p>
+            <p class="reveal reveal-delay-2">
+              我相信命盘是一种结构语言，但我不相信任何人能替你做决定。
+              我们一起看见、一起讨论、一起想办法，但路始终是你自己走的。
+            </p>
+          </div>
+          <div class="phil-right">
+            <div class="phil-card reveal reveal-delay-1">
+              <div class="num">01</div>
+              <div>
+                <h4>认真问问题</h4>
+                <p>每次咨询前我都会让你先把困惑写下来。问题清晰了，命盘里能给的信息才有用。</p>
+              </div>
+            </div>
+            <div class="phil-card reveal reveal-delay-2">
+              <div class="num">02</div>
+              <div>
+                <h4>用人话讲</h4>
+                <p>我尽量不用术语堆砌。命盘是工具，不是用来唬人的。能讲清楚的，就不绕弯。</p>
+              </div>
+            </div>
+            <div class="phil-card reveal reveal-delay-3">
+              <div class="num">03</div>
+              <div>
+                <h4>留出选择</h4>
+                <p>我不会告诉你「必须这样做」。命理只能给参考，做决定的永远是你自己。</p>
+              </div>
+            </div>
+            <div class="phil-card reveal reveal-delay-4">
+              <div class="num">04</div>
+              <div>
+                <h4>不夸大不恐吓</h4>
+                <p>没有「破财大灾」「招大祸」这类话。能讲的我都会讲，但不渲染情绪。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Journey -->
+    <section id="journey">
+      <div class="container">
+        <div class="journey-header reveal">
+          <p class="section-label">一路走来</p>
+          <h2>从问到答，<br />十几年的对话。</h2>
+        </div>
+        <div class="journey-list">
+          <div class="journey-item reveal">
+            <div class="journey-year">2008</div>
+            <div class="journey-content">
+              <h4>第一次接触紫微斗数</h4>
+              <p>因为家里长辈的一次咨询，开始对命盘产生兴趣。从一本旧书开始自学。</p>
+            </div>
+          </div>
+          <div class="journey-item reveal reveal-delay-1">
+            <div class="journey-year">2012</div>
+            <div class="journey-content">
+              <h4>师从大耕老师</h4>
+              <p>正式拜入大耕老师门下系统学习紫微斗数。这一年开始把命理当成一门要认真做的功课。</p>
+            </div>
+          </div>
+          <div class="journey-item reveal reveal-delay-1">
+            <div class="journey-year">2015</div>
+            <div class="journey-content">
+              <h4>开始接受私人咨询</h4>
+              <p>从身边朋友开始，慢慢接到来自不同城市的咨询。第一次意识到这件事可以做一辈子。</p>
+            </div>
+          </div>
+          <div class="journey-item reveal reveal-delay-2">
+            <div class="journey-year">2018</div>
+            <div class="journey-content">
+              <h4>八字 · 风水补课</h4>
+              <p>意识到只用紫微看人不够立体，补学八字与玄空风水。三套工具开始彼此印证。</p>
+            </div>
+          </div>
+          <div class="journey-item reveal reveal-delay-2">
+            <div class="journey-year">2021</div>
+            <div class="journey-content">
+              <h4>禧安堂正式成立</h4>
+              <p>把多年的咨询、教学、写作集中到一个地方。"禧"是平安喜乐，"安"是安顿身心。</p>
+            </div>
+          </div>
+          <div class="journey-item reveal reveal-delay-3">
+            <div class="journey-year">2024</div>
+            <div class="journey-content">
+              <h4>开课</h4>
+              <p>把这些年咨询里反复被问到的东西整理成课程。希望命理不只是少数人的工具。</p>
+            </div>
+          </div>
+          <div class="journey-item reveal reveal-delay-3">
+            <div class="journey-year">现在</div>
+            <div class="journey-content">
+              <h4>每天继续看盘、写作、教课</h4>
+              <p>每个节气写一封《节气来信》。命盘看了上千张，但每一张依然认真对待。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Counters -->
+    <section id="counters">
+      <div class="container">
+        <div class="counters-grid">
+          <div class="counter reveal">
+            <div class="counter-num">14<span>年</span></div>
+            <div class="counter-label">命理研修</div>
+          </div>
+          <div class="counter reveal reveal-delay-1">
+            <div class="counter-num">2,400<span>+</span></div>
+            <div class="counter-label">私人咨询</div>
+          </div>
+          <div class="counter reveal reveal-delay-2">
+            <div class="counter-num">12<span>个</span></div>
+            <div class="counter-label">城市勘察</div>
+          </div>
+          <div class="counter reveal reveal-delay-3">
+            <div class="counter-num">600<span>+</span></div>
+            <div class="counter-label">课程学员</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Four pillars -->
+    <section id="pillars">
+      <div class="container">
+        <div class="pillars-header reveal">
+          <p class="section-label">研修体系</p>
+          <h2>四套工具，<br />合在一起看一个人。</h2>
+          <p>每一套工具有自己的视角和盲区。把它们叠在一起看，画面才完整。</p>
+        </div>
+        <div class="pillars-grid">
+          <div class="pillar-card reveal">
+            <div class="pillar-glyph">紫</div>
+            <h4>紫微斗数</h4>
+            <p class="pillar-tag">看 结构</p>
+            <p>命盘像一栋房子，紫微看的是这栋房子的格局。性格、关系、人生主线在哪里。</p>
+          </div>
+          <div class="pillar-card reveal reveal-delay-1">
+            <div class="pillar-glyph">字</div>
+            <h4>八字命理</h4>
+            <p class="pillar-tag">看 质地</p>
+            <p>同一个格局的房子，材料不一样。八字看的是一个人的能量配比和运势节奏。</p>
+          </div>
+          <div class="pillar-card reveal reveal-delay-2">
+            <div class="pillar-glyph">水</div>
+            <h4>玄空风水</h4>
+            <p class="pillar-tag">看 场域</p>
+            <p>住在哪里，办公在哪里，会反过来影响你的状态。空间和人的能量是双向的。</p>
+          </div>
+          <div class="pillar-card reveal reveal-delay-3">
+            <div class="pillar-glyph">名</div>
+            <h4>姓名学</h4>
+            <p class="pillar-tag">看 符号</p>
+            <p>名字是一个人最常用的咒语。配合八字与字音字义，让符号成为你的助力。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section class="cta-band">
+      <div class="container">
+        <h2 class="reveal">想约一次咨询？</h2>
+        <p class="reveal reveal-delay-1">每周固定开放有限名额。先聊聊，看是哪种服务最合适你。</p>
+        <div class="cta-band-btns reveal reveal-delay-2">
+          <a href="contact.html#book" class="btn-primary">预约咨询</a>
+          <a href="services.html" class="btn-ghost" style="color:rgba(245,239,230,0.85);border-color:rgba(245,239,230,0.25);">查看服务</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="assets/logo-recolored.png" alt="禧安堂" style="height:32px;width:auto;display:block;margin-bottom:12px;opacity:0.85;filter:brightness(0) invert(1) sepia(1) saturate(0.4) brightness(1.2);" />
+          <p>安妍老师的命理之家。用紫微斗数、八字、风水，陪你看清当下，安顿未来。</p>
+        </div>
+        <div class="footer-col">
+          <h5>服务</h5>
+          <ul>
+            <li><a href="services.html#divination">论命</a></li>
+            <li><a href="services.html#naming">取名</a></li>
+            <li><a href="services.html#fengshui">风水</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>课程</h5>
+          <ul>
+            <li><a href="courses.html#dageng">大耕老师课程</a></li>
+            <li><a href="courses.html#anyan">安妍老师课程</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>更多</h5>
+          <ul>
+            <li><a href="about.html">关于安妍老师</a></li>
+            <li><a href="journal.html">文章</a></li>
+            <li><a href="contact.html">联系</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 禧安堂 Xiantang. All rights reserved.</p>
+        <div class="footer-legal"><a href="#">隐私政策</a><a href="#">服务条款</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile fixed CTA -->
+  <div id="mobile-cta">
+    <div class="mobile-cta-inner">
+      <a href="https://wa.me/" class="btn-wa" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp
+      </a>
+      <button class="btn-wechat" onclick="openWeChatModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8.5 12.5c0 3.038 2.686 5.5 6 5.5.595 0 1.17-.08 1.714-.229L19 19l-1-2.5C19.29 15.47 20 14.053 20 12.5 20 9.462 17.314 7 14 7s-5.5 2.462-5.5 5.5z"/><path d="M4 8c0 2.208 1.789 4 4 4 .397 0 .78-.057 1.143-.163L12 13l-.667-1.667A3.965 3.965 0 0012 9.667C12 7.457 10.209 6 8 6S4 7.457 4 8z" opacity="0.4"/></svg>
+        微信咨询
+      </button>
+    </div>
+  </div>
+
+  <!-- WeChat modal -->
+  <div class="modal-backdrop" id="wechat-modal" onclick="handleModalBackdropClick(event)">
+    <div class="modal-box">
+      <h3>微信咨询</h3>
+      <p>扫码添加安妍老师微信<br />备注「咨询」</p>
+      <div class="modal-qr img-placeholder" style="border-radius:8px;font-size:11px;">微信二维码<br />（待上传）</div>
+      <button class="modal-close" onclick="closeWeChatModal()">关闭</button>
+    </div>
+  </div>
+
+  <script src="assets/site.js"></script>
+</body>
+</html>

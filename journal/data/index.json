@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "2026-xiaoman-ganggang-hao",
+    "title": "小满 — 刚刚好的一种成熟",
+    "category": "节气",
+    "date": "2026-05-20",
+    "excerpt": "小满是个特别的节气。它不是\"满\"，而是\"开始变满\"。这种\"刚刚好\"的状态，值得我们专门停下来感受一下。",
+    "cover": "sage",
+    "glyph": "满",
+    "featured": false
+  },
+  {
+    "slug": "2026-lixia-shenti",
+    "title": "立夏 — 心气最盛时，怎么照顾自己",
+    "category": "节气",
+    "date": "2026-05-05",
+    "excerpt": "节气换的当口，身体会很诚实。这一周可以试试早起、晚睡，但中午留一段时间什么都不做。",
+    "cover": "sage",
+    "glyph": "夏",
+    "featured": false
+  },
+  {
+    "slug": "2026-suanming-ji-jian-shi",
+    "title": "关于「算命」我想说的几件事",
+    "category": "随笔",
+    "date": "2026-04-20",
+    "excerpt": "每次有人第一次找我咨询，都会问：「老师，我能不能问个具体的？」其实命理本来就是用来回答具体问题的，是后来被讲成了玄学的样子。",
+    "cover": "plum",
+    "glyph": "命",
+    "featured": true
+  },
+  {
+    "slug": "2026-guyu-shouwei",
+    "title": "谷雨 — 春末十五天，怎么收尾",
+    "category": "节气",
+    "date": "2026-04-19",
+    "excerpt": "春的最后一个节气。不要再开新计划，把已经在手上的事认真收一收。",
+    "cover": "sage",
+    "glyph": "雨",
+    "featured": false
+  }
+]

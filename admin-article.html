@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>新建文章 — 禧安堂管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    body { padding-bottom: 0; }
+    #site-nav { background: rgba(245, 239, 230, 0.96); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--gray-4); }
+
+    /* ── Admin Layout ── */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 100px 32px 64px;
+    }
+    @media (max-width: 768px) { main { padding: 100px 16px 40px; } }
+
+    .admin-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .admin-title h1 {
+      font-size: 32px; font-weight: 900;
+      color: var(--plum); line-height: 1.1;
+      margin-bottom: 4px;
+    }
+    .admin-title p {
+      font-size: 13px; color: var(--gray-3);
+      letter-spacing: 0.04em;
+    }
+    .admin-actions {
+      display: flex; gap: 10px; flex-wrap: wrap;
+    }
+    .admin-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-4);
+      background: #fff;
+      color: var(--plum);
+      font-family: inherit; font-size: 13px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .admin-btn:hover { border-color: var(--terracotta); color: var(--terracotta); }
+    .admin-btn.primary {
+      background: var(--terracotta); color: #fff; border-color: var(--terracotta);
+    }
+    .admin-btn.primary:hover { background: var(--plum); border-color: var(--plum); color: #fff; }
+    .admin-btn.success { background: var(--sage); color: #fff; border-color: var(--sage); }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) { .admin-grid { grid-template-columns: 1fr; } }
+
+    /* ── Form panel ── */
+    .panel {
+      background: #fff;
+      border: 1px solid var(--gray-4);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .panel-head {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--gray-4);
+      background: rgba(245,239,230,0.4);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .panel-head h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 14px; font-weight: 700;
+      color: var(--plum);
+      letter-spacing: 0.08em;
+    }
+    .panel-head .pill {
+      font-size: 10px; letter-spacing: 0.14em;
+      color: var(--gray-3); text-transform: uppercase;
+    }
+    .panel-body {
+      padding: 22px;
+    }
+    .field { display: grid; gap: 6px; margin-bottom: 16px; }
+    .field label {
+      font-size: 11px; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-3);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .field label .hint {
+      text-transform: none;
+      letter-spacing: 0.02em;
+      font-size: 11px;
+      color: var(--gray-4);
+    }
+    .field input, .field select, .field textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--gray-4);
+      border-radius: 8px;
+      background: #fff;
+      font-family: inherit; font-size: 14px;
+      color: var(--plum);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--terracotta);
+    }
+    .field textarea {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      resize: vertical;
+      min-height: 140px;
+    }
+    .field textarea.body-text {
+      min-height: 380px;
+    }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field-row.three { grid-template-columns: 1.2fr 1fr 1fr; }
+    @media (max-width: 600px) { .field-row, .field-row.three { grid-template-columns: 1fr; } }
+
+    /* Cover variant swatches */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .swatch {
+      cursor: pointer;
+      position: relative;
+    }
+    .swatch input { position: absolute; opacity: 0; pointer-events: none; }
+    .swatch .preview {
+      aspect-ratio: 5/3;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 26px; font-weight: 900;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .swatch input:checked + .preview {
+      border-color: var(--terracotta);
+      box-shadow: 0 0 0 2px var(--terracotta);
+    }
+    .swatch[data-cover=terracotta] .preview {
+      background: var(--terracotta-light); color: var(--terracotta);
+    }
+    .swatch[data-cover=sage] .preview {
+      background: var(--sage-light); color: var(--sage);
+    }
+    .swatch[data-cover=honey] .preview {
+      background: rgba(201,154,63,0.18); color: var(--honey);
+    }
+    .swatch[data-cover=plum] .preview {
+      background: var(--plum); color: var(--cream);
+    }
+    .swatch .name {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: var(--gray-3);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* Featured toggle */
+    .toggle-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
+      background: rgba(245,239,230,0.5);
+      border: 1px solid var(--gray-4);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .toggle-row input { width: 16px; height: 16px; accent-color: var(--terracotta); }
+    .toggle-row .label-text { font-size: 13px; color: var(--plum); }
+    .toggle-row .sublabel { font-size: 11px; color: var(--gray-3); margin-top: 2px; }
+
+    /* ── Output panel ── */
+    .out-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--gray-4);
+    }
+    .out-tab {
+      flex: 1;
+      padding: 14px 20px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--gray-3);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .out-tab.active {
+      color: var(--terracotta);
+      border-bottom-color: var(--terracotta);
+    }
+    .out-tab:not(.active):hover { color: var(--plum); }
+    .out-pane { display: none; }
+    .out-pane.active { display: block; }
+
+    .code-box {
+      position: relative;
+      margin: 0;
+      padding: 22px;
+      background: #1F1A1D;
+      color: #F5EFE6;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 12.5px;
+      line-height: 1.75;
+      max-height: 600px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .code-box-bar {
+      padding: 10px 22px;
+      background: #15110F;
+      color: var(--honey);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid rgba(245,239,230,0.1);
+    }
+    .copy-btn {
+      background: rgba(245,239,230,0.1);
+      color: var(--cream);
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-family: inherit; font-size: 11px;
+      letter-spacing: 0.06em;
+      cursor: pointer; border: none;
+      transition: background 0.2s;
+    }
+    .copy-btn:hover { background: rgba(245,239,230,0.2); }
+    .copy-btn.copied { background: var(--sage); color: #fff; }
+
+    /* Preview pane (rendered) */
+    .preview-pane {
+      padding: 32px;
+      max-height: 700px;
+      overflow: auto;
+    }
+    .prev-cover {
+      aspect-ratio: 16/8;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .prev-cover.terracotta { background: var(--terracotta-light); }
+    .prev-cover.sage { background: var(--sage-light); }
+    .prev-cover.honey { background: rgba(201,154,63,0.18); }
+    .prev-cover.plum { background: var(--plum); }
+    .prev-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .prev-cover .glyph-big {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 120px; font-weight: 900;
+      opacity: 0.55;
+      line-height: 1;
+    }
+    .prev-cover.terracotta .glyph-big { color: var(--terracotta); }
+    .prev-cover.sage .glyph-big { color: var(--sage); }
+    .prev-cover.honey .glyph-big { color: var(--honey); }
+    .prev-cover.plum .glyph-big { color: var(--cream); opacity: 0.9; }
+
+    .prev-cat {
+      font-family: 'Courier New', monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--honey);
+      margin-bottom: 14px;
+    }
+    .prev-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 32px; font-weight: 900;
+      color: var(--plum);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .prev-meta {
+      display: flex; gap: 12px; align-items: center;
+      font-size: 12px; color: var(--gray-3);
+      margin-bottom: 32px;
+      letter-spacing: 0.04em;
+    }
+    .prev-meta .dot { color: var(--gray-4); }
+    .prev-body {
+      font-size: 15px; line-height: 1.85;
+      color: var(--plum);
+    }
+    .prev-body h2 { font-size: 21px; margin: 32px 0 14px; color: var(--plum); }
+    .prev-body h3 { font-size: 17px; margin: 24px 0 12px; color: var(--plum); }
+    .prev-body p { margin-bottom: 14px; }
+    .prev-body strong { color: var(--terracotta); font-weight: 700; }
+    .prev-body em {
+      font-style: normal;
+      background: linear-gradient(180deg, transparent 60%, rgba(201,154,63,0.25) 60%);
+      padding: 0 3px;
+    }
+    .prev-body blockquote {
+      border-left: 3px solid var(--terracotta);
+      margin: 20px 0;
+      padding: 4px 16px;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 17px;
+      color: var(--plum);
+    }
+    .prev-body ul, .prev-body ol { margin: 12px 0 16px 20px; padding-left: 8px; }
+    .prev-body ul { list-style: none; padding-left: 0; }
+    .prev-body ul > li { padding-left: 20px; position: relative; margin-bottom: 6px; }
+    .prev-body ul > li::before {
+      content: ''; position: absolute; left: 0; top: 12px;
+      width: 10px; height: 1px; background: var(--terracotta);
+    }
+    .prev-body hr { border: none; border-top: 1px solid var(--gray-4); margin: 32px auto; width: 60px; }
+
+    /* Stat strip */
+    .stat-strip {
+      display: flex; gap: 0;
+      border-top: 1px solid var(--gray-4);
+    }
+    .stat {
+      flex: 1;
+      padding: 14px 18px;
+      border-right: 1px solid var(--gray-4);
+      text-align: center;
+    }
+    .stat:last-child { border-right: none; }
+    .stat .label {
+      font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-3); margin-bottom: 4px;
+    }
+    .stat .value {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--plum);
+    }
+    .stat .value.terracotta { color: var(--terracotta); }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" aria-label="主导航">
+    <a href="index.html" class="nav-logo"><img src="assets/logo-recolored.png" alt="禧安堂" style="height:44px;width:auto;display:block;" /></a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li><a href="about.html">关于</a></li>
+      <li><a href="services.html">服务</a></li>
+      <li><a href="courses.html">课程</a></li>
+      <li><a href="journal.html">文章</a></li>
+      <li><a href="contact.html">联系</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="admin-article.html" class="nav-cta">+ 新建文章</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="admin-header">
+      <div class="admin-title">
+        <h1>新建文章</h1>
+        <p>填写内容 / 粘贴 markdown → 一键复制下载</p>
+      </div>
+      <div class="admin-actions">
+        <button class="admin-btn" id="load-sample">载入样例</button>
+        <button class="admin-btn" id="clear-form">清空</button>
+        <button class="admin-btn primary" id="download-both">📦 下载发布包（.md + index.json）</button>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+
+      <!-- ── LEFT: Form ── -->
+      <div class="panel">
+        <div class="panel-head">
+          <h3>文章信息</h3>
+          <span class="pill">METADATA</span>
+        </div>
+        <div class="panel-body">
+
+          <div class="field">
+            <label>标题 <span class="hint">12 - 22 字最佳</span></label>
+            <input type="text" id="f-title" placeholder="例如：立夏 — 心气最盛时，怎么照顾自己" />
+          </div>
+
+          <div class="field">
+            <label>Slug <span class="hint">URL 标识 · 英文 / 数字 / 短横</span></label>
+            <input type="text" id="f-slug" placeholder="2026-lixia-shenti" />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>分类</label>
+              <select id="f-category">
+                <option>节气</option>
+                <option>随笔</option>
+                <option>案例</option>
+                <option>问答</option>
+                <option>读书笔记</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>日期</label>
+              <input type="date" id="f-date" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>作者</label>
+              <input type="text" id="f-author" value="安妍" />
+            </div>
+            <div class="field">
+              <label>封面字 <span class="hint">1 字</span></label>
+              <input type="text" id="f-glyph" placeholder="例如：夏" maxlength="2" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>封面色</label>
+            <div class="swatch-grid">
+              <label class="swatch" data-cover="terracotta">
+                <input type="radio" name="cover" value="terracotta" checked />
+                <div class="preview">夏</div>
+                <p class="name">terracotta</p>
+              </label>
+              <label class="swatch" data-cover="sage">
+                <input type="radio" name="cover" value="sage" />
+                <div class="preview">夏</div>
+                <p class="name">sage</p>
+              </label>
+              <label class="swatch" data-cover="honey">
+                <input type="radio" name="cover" value="honey" />
+                <div class="preview">夏</div>
+                <p class="name">honey</p>
+              </label>
+              <label class="swatch" data-cover="plum">
+                <input type="radio" name="cover" value="plum" />
+                <div class="preview">夏</div>
+                <p class="name">plum</p>
+              </label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>封面图（可选）<span class="hint">填了就替代色块</span></label>
+            <input type="text" id="f-coverimage" placeholder="例如：uploads/lixia.jpg" />
+          </div>
+
+          <div class="field">
+            <label>摘要 <span class="hint">1 - 2 句，列表卡片显示</span></label>
+            <textarea id="f-excerpt" rows="3" placeholder="节气换的当口，身体会很诚实……"></textarea>
+          </div>
+
+          <div class="field">
+            <label class="toggle-row">
+              <input type="checkbox" id="f-featured" />
+              <div>
+                <div class="label-text">置顶为 Featured</div>
+                <div class="sublabel">显示在文章列表顶部的大卡片</div>
+              </div>
+            </label>
+          </div>
+
+          <div class="field">
+            <label>正文 <span class="hint">支持 markdown · ## 标题 · **加粗** · *强调* · &gt; 引用</span></label>
+            <textarea id="f-body" class="body-text" placeholder="正文内容..."></textarea>
+          </div>
+
+          <div class="stat-strip">
+            <div class="stat">
+              <div class="label">字数</div>
+              <div class="value" id="stat-chars">0</div>
+            </div>
+            <div class="stat">
+              <div class="label">阅读时间</div>
+              <div class="value terracotta" id="stat-mins">0 分钟</div>
+            </div>
+            <div class="stat">
+              <div class="label">段落</div>
+              <div class="value" id="stat-paragraphs">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Output ── -->
+      <div class="panel">
+        <div class="out-tabs">
+          <button class="out-tab active" data-pane="preview">预览</button>
+          <button class="out-tab" data-pane="md">.md 文件</button>
+          <button class="out-tab" data-pane="json">完整 index.json</button>
+          <button class="out-tab" data-pane="instructions">如何发布</button>
+        </div>
+
+        <!-- Preview pane -->
+        <div class="out-pane active" id="pane-preview">
+          <div class="preview-pane">
+            <div class="prev-cover terracotta" id="prev-cover">
+              <span class="glyph-big" id="prev-glyph">夏</span>
+            </div>
+            <p class="prev-cat" id="prev-cat">节气</p>
+            <h1 class="prev-title" id="prev-title">文章标题</h1>
+            <div class="prev-meta">
+              <span id="prev-author">安妍</span>
+              <span class="dot">·</span>
+              <span id="prev-date">2026 / 05 / 17</span>
+              <span class="dot">·</span>
+              <span>读约 <span id="prev-mins">5</span> 分钟</span>
+            </div>
+            <div class="prev-body" id="prev-body"><em style="color:var(--gray-3);background:none;">在左边填写内容，这里会实时预览。</em></div>
+          </div>
+        </div>
+
+        <!-- MD output -->
+        <div class="out-pane" id="pane-md">
+          <div class="code-box-bar">
+            <span>journal/data/<span id="md-filename">slug.md</span></span>
+            <button class="copy-btn" data-copy="md">复制</button>
+          </div>
+          <pre class="code-box" id="md-code"></pre>
+        </div>
+
+        <!-- JSON output -->
+        <div class="out-pane" id="pane-json">
+          <div class="code-box-bar">
+            <span>journal/data/index.json · <span id="json-status" style="color:rgba(245,239,230,0.6);">读取中…</span></span>
+            <button class="copy-btn" data-copy="json">复制</button>
+          </div>
+          <pre class="code-box" id="json-code"></pre>
+        </div>
+
+        <!-- Instructions -->
+        <div class="out-pane" id="pane-instructions">
+          <div class="preview-pane">
+            <h2 style="font-size: 22px; color: var(--plum); margin-bottom: 16px;">📤 三步发布</h2>
+
+            <div style="background: rgba(194,96,63,0.08); padding: 24px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(194,96,63,0.2);">
+              <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--terracotta);">1. 点「📦 下载发布包」按钮</h3>
+              <p style="font-size: 14px; color: var(--gray-2); line-height: 1.75;">
+                会自动下载两个文件：<br>
+                · <code style="background: #fff; padding: 1px 6px; border-radius: 3px; font-size: 13px;">&lt;slug&gt;.md</code> — 文章本体<br>
+                · <code style="background: #fff; padding: 1px 6px; border-radius: 3px; font-size: 13px;">index.json</code> — 已包含所有现存文章 + 你的新文章
+              </p>
+              <p style="font-size: 13px; color: var(--sage); margin-top: 12px;">
+                ✓ 不用手动编辑 JSON ✓ 不会破坏已发布的文章
+              </p>
+            </div>
+
+            <div style="background: rgba(245,239,230,0.6); padding: 24px; border-radius: 12px; margin-bottom: 20px;">
+              <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--plum);">2. 把两个文件放进 GitHub</h3>
+              <p style="font-size: 14px; color: var(--gray-2); line-height: 1.75;">
+                打开你的 GitHub repo → 导航到 <code style="background: #fff; padding: 1px 6px; border-radius: 3px; font-size: 13px;">journal/data/</code>：
+              </p>
+              <ul style="margin: 10px 0 0 20px; font-size: 14px; color: var(--gray-2); line-height: 1.85;">
+                <li>把 <code style="background: #fff; padding: 1px 6px; border-radius: 3px; font-size: 13px;">&lt;slug&gt;.md</code> 拖进文件夹（新文件）</li>
+                <li>用新的 <code style="background: #fff; padding: 1px 6px; border-radius: 3px; font-size: 13px;">index.json</code> 替换旧的（覆盖）</li>
+                <li>Commit changes</li>
+              </ul>
+            </div>
+
+            <div style="background: rgba(138,154,130,0.12); padding: 24px; border-radius: 12px;">
+              <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--sage);">3. 等 Vercel / Netlify 自动部署</h3>
+              <p style="font-size: 14px; color: var(--gray-2); line-height: 1.75;">
+                通常 1 - 2 分钟。完成后访问 <code style="background: #fff; padding: 1px 6px; border-radius: 3px; font-size: 13px;">https://xiantang.life/journal.html</code> 就能看到新文章。
+              </p>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid var(--gray-4); margin: 32px 0;">
+
+            <h3 style="font-size: 16px; color: var(--plum); margin-bottom: 12px;">⚙️ 给 Live Artifact 的接口</h3>
+            <p style="font-size: 13px; color: var(--gray-2); line-height: 1.7; margin-bottom: 10px;">
+              你的生成器可以用 postMessage 自动填表：
+            </p>
+            <pre style="background: #1F1A1D; color: #F5EFE6; padding: 16px; border-radius: 8px; font-size: 12px; overflow: auto;">window.postMessage({
+  type: 'xiantang-article-fill',
+  data: { title, slug, category, date,
+          glyph, cover, excerpt, body }
+}, '*');</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@14.1.3/marked.min.js"></script>
+  <script>
+    // ── Elements ──
+    const f = {
+      title: document.getElementById('f-title'),
+      slug: document.getElementById('f-slug'),
+      category: document.getElementById('f-category'),
+      date: document.getElementById('f-date'),
+      author: document.getElementById('f-author'),
+      glyph: document.getElementById('f-glyph'),
+      coverimage: document.getElementById('f-coverimage'),
+      excerpt: document.getElementById('f-excerpt'),
+      featured: document.getElementById('f-featured'),
+      body: document.getElementById('f-body'),
+    };
+    const coverRadios = document.querySelectorAll('input[name=cover]');
+
+    // Default today
+    f.date.value = new Date().toISOString().slice(0, 10);
+
+    // ── Auto slug from title ──
+    let slugManual = false;
+    f.slug.addEventListener('input', () => { slugManual = f.slug.value.length > 0; });
+    f.title.addEventListener('input', () => {
+      if (!slugManual) {
+        // Try: date + simple chinese phonetic-like slug — keep simple: date + first few latin chars
+        const date = f.date.value || new Date().toISOString().slice(0, 10);
+        const latin = f.title.value.match(/[a-z0-9]+/gi)?.join('-').toLowerCase() || '';
+        const fallback = latin || `article-${Date.now().toString(36)}`;
+        f.slug.value = `${date}-${fallback}`.slice(0, 60);
+      }
+    });
+
+    // ── Update swatch glyph live ──
+    f.glyph.addEventListener('input', () => {
+      const g = f.glyph.value || '○';
+      document.querySelectorAll('.swatch .preview').forEach(p => p.textContent = g);
+    });
+
+    // ── Reading time ──
+    function computeReadingMinutes(body) {
+      const clean = body
+        .replace(/```[\s\S]*?```/g, '')
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+        .replace(/\[[^\]]*\]\([^)]*\)/g, '$1')
+        .replace(/[#>*_`~\-]/g, '')
+        .replace(/\s+/g, ' ');
+      const cjk = (clean.match(/[\u4e00-\u9fff\u3400-\u4dbf]/g) || []).length;
+      const en = (clean.match(/[A-Za-z]+/g) || []).length;
+      const minutes = (cjk / 350) + (en / 220);
+      return Math.max(1, Math.round(minutes));
+    }
+    function countChars(body) {
+      const clean = body.replace(/[#>*_`~\-]/g, '').replace(/\s+/g, '');
+      return clean.length;
+    }
+    function countParagraphs(body) {
+      return (body.split(/\n\s*\n/).filter(p => p.trim()).length);
+    }
+
+    function fmtDate(iso) {
+      if (!iso) return '';
+      const p = iso.split('-');
+      return p.length >= 3 ? `${p[0]} / ${p[1]} / ${p[2]}` : iso;
+    }
+
+    function getCover() {
+      const r = document.querySelector('input[name=cover]:checked');
+      return r ? r.value : 'terracotta';
+    }
+
+    // ── Generate MD ──
+    function genMD() {
+      const cover = getCover();
+      const meta = {
+        slug: f.slug.value.trim() || 'untitled',
+        title: f.title.value.trim() || '未命名文章',
+        category: f.category.value,
+        date: f.date.value,
+        author: f.author.value.trim() || '安妍',
+        cover: cover,
+        glyph: f.glyph.value.trim() || '○',
+        coverImage: f.coverimage.value.trim(),
+        excerpt: f.excerpt.value.trim().replace(/\n/g, ' '),
+      };
+      const fm = [
+        '---',
+        `slug: ${meta.slug}`,
+        `title: ${meta.title}`,
+        `category: ${meta.category}`,
+        `date: ${meta.date}`,
+        `author: ${meta.author}`,
+        `cover: ${meta.cover}`,
+        `glyph: ${meta.glyph}`,
+        `coverImage: ${meta.coverImage}`,
+        `excerpt: ${meta.excerpt}`,
+        '---',
+        '',
+        f.body.value,
+      ].join('\n');
+      return fm;
+    }
+
+
+
+    // ── Render ──
+    function render() {
+      // Stats
+      const body = f.body.value;
+      document.getElementById('stat-chars').textContent = countChars(body).toLocaleString();
+      document.getElementById('stat-mins').textContent = computeReadingMinutes(body) + ' 分钟';
+      document.getElementById('stat-paragraphs').textContent = countParagraphs(body);
+
+      // MD + JSON
+      document.getElementById('md-code').textContent = genMD();
+      document.getElementById('json-code').textContent =
+        indexLoaded ? buildFullIndex() : genJSONEntry();
+      document.getElementById('md-filename').textContent =
+        (f.slug.value.trim() || 'untitled') + '.md';
+
+      // Preview
+      const cover = getCover();
+      const coverEl = document.getElementById('prev-cover');
+      coverEl.className = 'prev-cover ' + cover;
+      coverEl.innerHTML = '';
+      if (f.coverimage.value.trim()) {
+        const img = document.createElement('img');
+        img.src = f.coverimage.value.trim();
+        coverEl.appendChild(img);
+      } else {
+        const span = document.createElement('span');
+        span.className = 'glyph-big';
+        span.textContent = f.glyph.value.trim() || '○';
+        coverEl.appendChild(span);
+      }
+      document.getElementById('prev-cat').textContent = f.category.value;
+      document.getElementById('prev-title').textContent = f.title.value.trim() || '文章标题';
+      document.getElementById('prev-author').textContent = f.author.value.trim() || '安妍';
+      document.getElementById('prev-date').textContent = fmtDate(f.date.value);
+      document.getElementById('prev-mins').textContent = computeReadingMinutes(body);
+
+      const html = body.trim() ? marked.parse(body)
+        : '<em style="color:var(--gray-3);background:none;">在左边填写正文，这里会实时预览。</em>';
+      document.getElementById('prev-body').innerHTML = html;
+    }
+
+    // Wire all inputs
+    Object.values(f).forEach(el => el.addEventListener('input', render));
+    coverRadios.forEach(r => r.addEventListener('change', render));
+
+    // Tabs
+    document.querySelectorAll('.out-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.out-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.out-pane').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('pane-' + tab.dataset.pane).classList.add('active');
+      });
+    });
+
+    // Copy buttons
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const which = btn.dataset.copy;
+        const text = which === 'md' ? genMD() : buildFullIndex();
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = '已复制 ✓';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1800);
+        } catch (e) {
+          alert('复制失败，请手动选取');
+        }
+      });
+    });
+
+    // ── State: existing index.json ──
+    let existingIndex = [];
+    let indexLoaded = false;
+
+    function buildFullIndex() {
+      // Start from existing, remove any entry with same slug (replace mode), insert new, sort by date desc
+      const newEntry = JSON.parse(genJSONEntry());
+      const filtered = existingIndex.filter(a => a.slug !== newEntry.slug);
+      const merged = [newEntry, ...filtered].sort((a, b) =>
+        (b.date || '').localeCompare(a.date || ''));
+      return JSON.stringify(merged, null, 2);
+    }
+
+    function genJSONEntry() {
+      const obj = {
+        slug: f.slug.value.trim() || 'untitled',
+        title: f.title.value.trim() || '未命名文章',
+        category: f.category.value,
+        date: f.date.value,
+        excerpt: f.excerpt.value.trim().replace(/\n/g, ' '),
+        cover: getCover(),
+        glyph: f.glyph.value.trim() || '○',
+        featured: f.featured.checked,
+      };
+      return JSON.stringify(obj, null, 2);
+    }
+
+    // Fetch existing index.json so we can rebuild the full file
+    fetch('journal/data/index.json')
+      .then(r => r.ok ? r.json() : [])
+      .then(data => {
+        existingIndex = Array.isArray(data) ? data : [];
+        indexLoaded = true;
+        const cur = f.slug.value.trim();
+        const isUpdate = cur && existingIndex.find(a => a.slug === cur);
+        document.getElementById('json-status').textContent =
+          `当前 ${existingIndex.length} 篇` + (isUpdate ? ' · 将更新已有' : ' · 将新增 1 篇');
+        render();
+      })
+      .catch(() => {
+        existingIndex = [];
+        indexLoaded = true;
+        document.getElementById('json-status').textContent = '无法读取（首次发布）';
+        render();
+      });
+
+    // Update status when slug changes
+    f.slug.addEventListener('input', () => {
+      if (!indexLoaded) return;
+      const cur = f.slug.value.trim();
+      const isUpdate = cur && existingIndex.find(a => a.slug === cur);
+      document.getElementById('json-status').textContent =
+        `当前 ${existingIndex.length} 篇` + (isUpdate ? ' · 将更新已有' : ' · 将新增 1 篇');
+    });
+
+    function downloadFile(filename, content, mime) {
+      const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 500);
+    }
+
+    // Download BOTH files
+    document.getElementById('download-both').addEventListener('click', () => {
+      if (!indexLoaded) {
+        if (!confirm('还没读取现有的 index.json — 现在下载会以「只有这一篇」覆盖。继续？')) return;
+      }
+      const slug = f.slug.value.trim() || 'untitled';
+      if (!f.title.value.trim() || !f.body.value.trim()) {
+        alert('请先填写标题和正文。');
+        return;
+      }
+      downloadFile(slug + '.md', genMD(), 'text/markdown');
+      // Small delay so the second download isn't blocked
+      setTimeout(() => {
+        downloadFile('index.json', buildFullIndex(), 'application/json');
+      }, 400);
+    });
+
+    // Clear
+    document.getElementById('clear-form').addEventListener('click', () => {
+      if (!confirm('确定清空所有字段？')) return;
+      Object.values(f).forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+      });
+      f.author.value = '安妍';
+      f.date.value = new Date().toISOString().slice(0, 10);
+      slugManual = false;
+      render();
+    });
+
+    // Load sample
+    document.getElementById('load-sample').addEventListener('click', () => {
+      f.title.value = '小满 — 刚刚好的一种成熟';
+      slugManual = true;
+      f.slug.value = '2026-xiaoman-ganggang-hao';
+      f.category.value = '节气';
+      f.date.value = '2026-05-20';
+      f.author.value = '安妍';
+      f.glyph.value = '满';
+      document.querySelector('input[name=cover][value=sage]').checked = true;
+      f.coverimage.value = '';
+      f.excerpt.value = '小满是个特别的节气。它不是"满"，而是"开始变满"。这种"刚刚好"的状态，值得我们专门停下来感受一下。';
+      f.featured.checked = false;
+      f.body.value = `小满，是二十四节气里我最喜欢的一个。
+
+它不是"最满"，是"开始变满"。庄稼的籽粒开始饱满，但还没到最后丰收。这种"快要好了，但还没好"的状态，特别有意思。
+
+## 为什么这个节气特别
+
+中国人的智慧里，"满"经常是个警告 — 满则溢，水满则倾。所以二十四节气里有立夏、有夏至，但没有"大满"。
+
+只有小满。
+
+**月盈则亏、物极必反**。古人早就懂了这件事，所以专门留出一个"刚刚好"的节点，提醒我们 — 不必非要追求满分。
+
+## 这一周可以试试
+
+- 把一件最近做得"差不多了"的事，认真画个句号。不要因为还能再改而拖着。
+- 早上 6 点前起床。立夏到夏至这段时间是阳气最旺的一段，早起一周身体能明显感觉到不同。
+- 多吃苦味的东西。莲子心、苦瓜、绿茶都好。"夏属心，苦入心"，这一周用苦味养心是顺时令的。
+
+## 命盘里看小满
+
+小满落在巳月的后半段。如果你的命宫主星是太阳，这段时间会被周围的人格外注意到 — 利于公开发声、利于谈判。
+
+> 但要注意：太阳明亮也容易过曝。能站在台上是机会，也要小心被太多目光"晒"得失了平衡。
+
+如果你最近觉得自己"火气有点大" — 容易急、容易跟人吵 — 立夏到夏至这一个月都要留意。降火不是压抑情绪，是给情绪找出口。
+
+---
+
+下一封节气来信，芒种见。`;
+      slugManual = true;
+      render();
+    });
+
+    // Initial render
+    render();
+
+    // ── postMessage API for live artifact integration ──
+    // Allows external tools to fill the form via:
+    //   window.postMessage({type: 'xiantang-article-fill', data: {...}}, '*')
+    window.addEventListener('message', (e) => {
+      if (e.data?.type !== 'xiantang-article-fill') return;
+      const d = e.data.data || {};
+      if (d.title) { f.title.value = d.title; slugManual = true; }
+      if (d.slug) f.slug.value = d.slug;
+      if (d.category) f.category.value = d.category;
+      if (d.date) f.date.value = d.date;
+      if (d.author) f.author.value = d.author;
+      if (d.glyph) f.glyph.value = d.glyph;
+      if (d.cover) {
+        const r = document.querySelector(`input[name=cover][value=${d.cover}]`);
+        if (r) r.checked = true;
+      }
+      if (d.coverImage) f.coverimage.value = d.coverImage;
+      if (d.excerpt) f.excerpt.value = d.excerpt;
+      if (typeof d.featured === 'boolean') f.featured.checked = d.featured;
+      if (d.body) f.body.value = d.body;
+      render();
+    });
+  </script>
+</body>
+</html>

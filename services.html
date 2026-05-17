@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>命理服务 — 禧安堂</title>
+  <meta name="description" content="择日、论命、取名、风水、符箓 — 禧安堂安妍老师的五种实用命理服务。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site.css" />
+  <style>
+    #services-list { padding: 64px 0 var(--section-pad); }
+    .service-row { display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; align-items: center; padding: 80px 0; border-bottom: 1px solid var(--gray-4); }
+    .service-row:last-child { border-bottom: none; }
+    .service-row.flip { grid-template-columns: 1fr 1.1fr; }
+    .service-row.flip .service-row-text { order: 2; }
+    @media (max-width: 900px) {
+      .service-row, .service-row.flip { grid-template-columns: 1fr; gap: 32px; padding: 56px 0; }
+      .service-row.flip .service-row-text { order: 0; }
+    }
+    .service-row-visual { aspect-ratio: 4/5; border-radius: 20px; background: var(--plum); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .service-row-visual svg { width: 38%; height: 38%; opacity: 0.85; position: relative; z-index: 1; }
+    .service-row-visual::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, rgba(194,96,63,0.35) 0%, transparent 60%), radial-gradient(circle at 20% 80%, rgba(201,154,63,0.18) 0%, transparent 60%); }
+    .service-row-visual .num { position: absolute; top: 24px; left: 24px; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.18em; color: rgba(245,239,230,0.6); z-index: 2; }
+    .service-row-visual .label { position: absolute; bottom: 24px; left: 24px; font-family: 'Noto Serif SC', serif; font-size: 36px; font-weight: 900; color: var(--cream); letter-spacing: 0.04em; z-index: 2; }
+    .service-row-text .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--honey); margin-bottom: 14px; }
+    .service-row-text h2 { font-size: clamp(34px, 4vw, 56px); font-weight: 900; color: var(--plum); line-height: 1.05; margin-bottom: 12px; }
+    .service-row-text .tagline { font-size: 14px; letter-spacing: 0.08em; color: var(--sage); margin-bottom: 24px; }
+    .service-row-text > p { font-size: 16px; color: var(--gray-2); line-height: 1.85; margin-bottom: 16px; }
+    .service-detail-list { list-style: none; margin: 24px 0; display: grid; gap: 8px; }
+    .service-detail-list li { font-size: 14px; color: var(--gray-2); padding-left: 22px; position: relative; line-height: 1.6; }
+    .service-detail-list li::before { content: ''; position: absolute; left: 0; top: 11px; width: 12px; height: 1px; background: var(--terracotta); }
+    .service-fact-bar { display: flex; flex-wrap: wrap; gap: 28px; padding: 20px 0; margin: 24px 0; border-top: 1px solid var(--gray-4); border-bottom: 1px solid var(--gray-4); }
+    .service-fact .label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray-3); margin-bottom: 4px; }
+    .service-fact .value { font-family: 'Noto Serif SC', serif; font-size: 18px; font-weight: 700; color: var(--plum); }
+    .service-fact .value.price { color: var(--terracotta); }
+    .row-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+    #process { background: var(--plum); padding: var(--section-pad-sm) 0; color: var(--cream); }
+    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 48px; }
+    @media (max-width: 768px) { .process-grid { grid-template-columns: 1fr 1fr; } }
+    .process-step { background: rgba(245,239,230,0.04); padding: 36px 28px; border: 1px solid rgba(245,239,230,0.07); }
+    .step-num { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.16em; color: var(--honey); margin-bottom: 24px; }
+    .process-step h4 { font-size: 18px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
+    .process-step p { font-size: 13px; color: rgba(245,239,230,0.6); line-height: 1.7; }
+    #process .section-label { color: var(--sage); }
+    #process h2 { color: var(--cream); font-size: clamp(28px, 3.2vw, 44px); }
+    #compare { padding: var(--section-pad) 0; background: #ede7de; }
+    .compare-header { text-align: center; margin-bottom: 56px; }
+    .compare-header h2 { font-size: clamp(28px, 3.2vw, 44px); }
+    .compare-header p { color: var(--gray-3); max-width: 540px; margin: 12px auto 0; }
+    .compare-table { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 16px; overflow: hidden; border: 1px solid var(--gray-4); }
+    .compare-row { display: grid; grid-template-columns: 1.1fr 1fr 1fr 1fr; align-items: center; }
+    .compare-row.head { background: var(--cream); font-family: 'Noto Serif SC', serif; font-size: 13px; font-weight: 700; color: var(--plum); letter-spacing: 0.06em; }
+    .compare-row > div { padding: 18px 20px; border-bottom: 1px solid var(--gray-4); font-size: 14px; color: var(--gray-2); }
+    .compare-row:last-child > div { border-bottom: none; }
+    .compare-row > div:first-child { font-weight: 700; color: var(--plum); font-family: 'Noto Serif SC', serif; background: rgba(245,239,230,0.4); }
+    @media (max-width: 768px) {
+      .compare-row { grid-template-columns: 1fr; }
+      .compare-row.head { display: none; }
+    }
+    #faq { padding: var(--section-pad) 0; }
+    .faq-grid { max-width: 800px; margin: 56px auto 0; display: grid; gap: 1px; background: var(--gray-4); border: 1px solid var(--gray-4); border-radius: 16px; overflow: hidden; }
+    .faq-item { background: #fff; padding: 28px 32px; cursor: pointer; }
+    .faq-q { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; font-family: 'Noto Serif SC', serif; font-size: 17px; font-weight: 700; color: var(--plum); list-style: none; }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-q .marker { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gray-4); display: flex; align-items: center; justify-content: center; color: var(--terracotta); font-size: 14px; transition: transform 0.25s var(--ease-out); }
+    .faq-item[open] .faq-q .marker { transform: rotate(45deg); }
+    .faq-a { margin-top: 14px; font-size: 14px; color: var(--gray-2); line-height: 1.8; }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" aria-label="主导航">
+    <a href="index.html" class="nav-logo"><img src="assets/logo-recolored.png" alt="禧安堂" style="height:44px;width:auto;display:block;" /></a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li><a href="about.html">关于</a></li>
+      <li><a href="services.html" class="active">服务</a></li>
+      <li><a href="courses.html">课程</a></li>
+      <li><a href="journal.html">文章</a></li>
+      <li><a href="contact.html">联系</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-lang">EN</span>
+      <a href="contact.html#book" class="nav-cta">预约咨询</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-head">
+      <div class="page-head-inner">
+        <p class="page-head-eyebrow reveal">命理服务 · Services</p>
+        <h1 class="reveal reveal-delay-1">五种服务，<br />帮你看清<em>一个具体问题</em>。</h1>
+        <p class="lede reveal reveal-delay-2">择日、论命、取名、风水、符箓 — 每一种都是实用的工具，不是玄学表演。下面是它们各自能回答什么样的问题，以及怎么选。</p>
+      </div>
+    </section>
+
+    <section id="services-list">
+      <div class="container">
+        <article class="service-row" id="divination">
+          <div class="service-row-visual reveal">
+            <span class="num">01 / 命盘</span>
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="50" r="42" stroke="#F5EFE6" stroke-width="1"/>
+              <circle cx="50" cy="50" r="28" stroke="#C99A3F" stroke-width="0.8" stroke-dasharray="2 3"/>
+              <circle cx="50" cy="50" r="14" fill="#C2603F" opacity="0.55"/>
+              <circle cx="50" cy="50" r="4" fill="#F5EFE6"/>
+            </svg>
+            <span class="label">论命</span>
+          </div>
+          <div class="service-row-text">
+            <p class="eyebrow reveal">最常被预约</p>
+            <h2 class="reveal reveal-delay-1">论命</h2>
+            <p class="tagline reveal reveal-delay-1">紫微斗数 · 八字</p>
+            <p class="reveal reveal-delay-2">45 分钟，任意问题。我会先读你的命盘 — 命宫、夫妻、事业、财帛都看一遍 — 然后我们一起聊你最关心的几件事。</p>
+            <ul class="service-detail-list reveal reveal-delay-3">
+              <li>能问关于自己的性格、关系模式、近一两年的运势走势</li>
+              <li>能问具体抉择 — 换工作、移居、创业、要不要继续这段关系</li>
+              <li>能问家人朋友的命盘（带上他们的出生信息）</li>
+              <li>结束后会发一份命盘图与本次重点摘要</li>
+            </ul>
+            <div class="service-fact-bar reveal reveal-delay-3">
+              <div class="service-fact"><div class="label">时长</div><div class="value">45 分钟</div></div>
+              <div class="service-fact"><div class="label">形式</div><div class="value">视频 / 当面</div></div>
+              <div class="service-fact"><div class="label">价格</div><div class="value price">$300</div></div>
+            </div>
+            <div class="row-cta reveal reveal-delay-4">
+              <a href="contact.html#book" class="btn-primary">预约</a>
+              <a href="journal.html" class="btn-ghost">读相关文章</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="service-row flip" id="zeri">
+          <div class="service-row-text">
+            <p class="eyebrow reveal">为重要时刻挑日子</p>
+            <h2 class="reveal reveal-delay-1">择日</h2>
+            <p class="tagline reveal reveal-delay-1">剖腹产 · 结婚 · 搬家 · 开业</p>
+            <p class="reveal reveal-delay-2">重要的人生节点，选一个与你相合的日子，让时机和行动共振。不是迷信，是给你一个方便落地的参考时点。</p>
+            <ul class="service-detail-list reveal reveal-delay-3">
+              <li>剖腹产择日 — 给出 3 个吉时，附说明</li>
+              <li>结婚择日 — 综合两人的命盘择吉</li>
+              <li>搬家 / 入宅择日 — 配合新居方位</li>
+              <li>开业 / 签约 — 商务层面的择吉</li>
+            </ul>
+            <div class="service-fact-bar reveal reveal-delay-3">
+              <div class="service-fact"><div class="label">交付</div><div class="value">3 - 5 天</div></div>
+              <div class="service-fact"><div class="label">形式</div><div class="value">PDF 报告</div></div>
+              <div class="service-fact"><div class="label">价格</div><div class="value price">$200</div></div>
+            </div>
+            <div class="row-cta reveal reveal-delay-4"><a href="contact.html#book" class="btn-primary">预约</a></div>
+          </div>
+          <div class="service-row-visual reveal">
+            <span class="num">02 / 时辰</span>
+            <svg viewBox="0 0 100 100" fill="none">
+              <rect x="20" y="22" width="60" height="56" rx="4" stroke="#F5EFE6" stroke-width="1"/>
+              <line x1="20" y1="38" x2="80" y2="38" stroke="#C99A3F" stroke-width="0.8" opacity="0.6"/>
+              <circle cx="50" cy="54" r="3" fill="#C2603F"/>
+              <circle cx="34" cy="54" r="3" fill="#C99A3F" opacity="0.7"/>
+              <circle cx="66" cy="54" r="3" fill="#C99A3F" opacity="0.7"/>
+            </svg>
+            <span class="label">择日</span>
+          </div>
+        </article>
+
+        <article class="service-row" id="naming">
+          <div class="service-row-visual reveal">
+            <span class="num">03 / 字</span>
+            <svg viewBox="0 0 100 100" fill="none">
+              <rect x="22" y="28" width="56" height="44" rx="2" stroke="#F5EFE6" stroke-width="1"/>
+              <line x1="35" y1="44" x2="65" y2="44" stroke="#C99A3F" stroke-width="1.5"/>
+              <line x1="35" y1="52" x2="58" y2="52" stroke="#C99A3F" stroke-width="1.5" opacity="0.7"/>
+              <line x1="35" y1="60" x2="55" y2="60" stroke="#C99A3F" stroke-width="1.5" opacity="0.4"/>
+              <path d="M55 14 L50 24 L60 24 Z" fill="#C2603F"/>
+            </svg>
+            <span class="label">取名</span>
+          </div>
+          <div class="service-row-text">
+            <p class="eyebrow reveal">最常用的咒语</p>
+            <h2 class="reveal reveal-delay-1">取名</h2>
+            <p class="tagline reveal reveal-delay-1">新生儿取名 · 改吉名 · 公司命名</p>
+            <p class="reveal reveal-delay-2">名字是一个人最常用的符号，值得认真对待。配合八字与字音字义，我会给出 3 个备选方案，每个名字都附详细说明。</p>
+            <ul class="service-detail-list reveal reveal-delay-3">
+              <li>新生儿取名 — 配合宝宝八字</li>
+              <li>改名 — 看现名是否需要调整 / 提供新方案</li>
+              <li>公司 / 品牌命名 — 综合行业五行与口播感</li>
+            </ul>
+            <div class="service-fact-bar reveal reveal-delay-3">
+              <div class="service-fact"><div class="label">交付</div><div class="value">7 - 10 天</div></div>
+              <div class="service-fact"><div class="label">方案</div><div class="value">3 个</div></div>
+              <div class="service-fact"><div class="label">价格</div><div class="value price">$800</div></div>
+            </div>
+            <div class="row-cta reveal reveal-delay-4"><a href="contact.html#book" class="btn-primary">预约</a></div>
+          </div>
+        </article>
+
+        <article class="service-row flip" id="fengshui">
+          <div class="service-row-text">
+            <p class="eyebrow reveal">空间能量诊断</p>
+            <h2 class="reveal reveal-delay-1">风水</h2>
+            <p class="tagline reveal reveal-delay-1">家居 · 商业 · 选址</p>
+            <p class="reveal reveal-delay-2">空间气场会反过来影响居住者的状态。我用玄空飞星和形势派结合 — 到访堪舆，或在视频里走一遍房间。</p>
+            <ul class="service-detail-list reveal reveal-delay-3">
+              <li>家居风水勘察 — 包括布局、方位、五行调整</li>
+              <li>商业风水 — 办公室、店面布局与开业时机</li>
+              <li>选址 — 看房 / 看店的前置咨询</li>
+            </ul>
+            <div class="service-fact-bar reveal reveal-delay-3">
+              <div class="service-fact"><div class="label">起价</div><div class="value price">$1,000</div></div>
+              <div class="service-fact"><div class="label">单价</div><div class="value">$1 / sqft</div></div>
+              <div class="service-fact"><div class="label">形式</div><div class="value">到访 / 视频</div></div>
+            </div>
+            <div class="row-cta reveal reveal-delay-4"><a href="contact.html#book" class="btn-primary">预约</a></div>
+          </div>
+          <div class="service-row-visual reveal">
+            <span class="num">04 / 场</span>
+            <svg viewBox="0 0 100 100" fill="none">
+              <rect x="14" y="50" width="28" height="32" rx="2" stroke="#F5EFE6" stroke-width="1"/>
+              <rect x="50" y="34" width="34" height="48" rx="2" stroke="#F5EFE6" stroke-width="1"/>
+              <line x1="8" y1="82" x2="92" y2="82" stroke="#C99A3F" stroke-width="1.2"/>
+              <path d="M30 50 C28 38 50 24 65 32" stroke="#C2603F" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+            </svg>
+            <span class="label">风水</span>
+          </div>
+        </article>
+
+        <article class="service-row" id="fulu">
+          <div class="service-row-visual reveal">
+            <span class="num">05 / 符</span>
+            <svg viewBox="0 0 100 100" fill="none">
+              <rect x="32" y="14" width="36" height="68" rx="2" stroke="#F5EFE6" stroke-width="1"/>
+              <path d="M40 76 Q48 50 50 28 Q54 50 60 76" stroke="#C2603F" stroke-width="1.2" fill="none"/>
+              <path d="M44 50 Q50 46 56 50" stroke="#C99A3F" stroke-width="1" fill="none"/>
+              <circle cx="50" cy="22" r="2" fill="#C2603F"/>
+            </svg>
+            <span class="label">符箓</span>
+          </div>
+          <div class="service-row-text">
+            <p class="eyebrow reveal">辅助型 · 不替代主咨询</p>
+            <h2 class="reveal reveal-delay-1">符箓</h2>
+            <p class="tagline reveal reveal-delay-1">出行平安 · 招财 · 防小人</p>
+            <p class="reveal reveal-delay-2">全光平安符、正财招财符、镇宅大符等，多种符箓可选。符箓的作用是辅助、是提醒，不替代咨询里的具体建议。</p>
+            <ul class="service-detail-list reveal reveal-delay-3">
+              <li>全光平安符 — $120 起</li>
+              <li>正财招财符 — $180 起</li>
+              <li>桃花符 / 防小人符 — $150 起</li>
+              <li>镇宅大符 — 配合风水勘察使用 — $380 起</li>
+            </ul>
+            <div class="service-fact-bar reveal reveal-delay-3">
+              <div class="service-fact"><div class="label">起价</div><div class="value price">$120</div></div>
+              <div class="service-fact"><div class="label">交付</div><div class="value">国内邮寄</div></div>
+              <div class="service-fact"><div class="label">效期</div><div class="value">1 年</div></div>
+            </div>
+            <div class="row-cta reveal reveal-delay-4"><a href="contact.html#book" class="btn-primary">咨询</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="container" style="text-align:center;">
+        <p class="section-label reveal">咨询流程</p>
+        <h2 class="reveal reveal-delay-1">从预约到结束，<br />四步走完。</h2>
+      </div>
+      <div class="container">
+        <div class="process-grid">
+          <div class="process-step reveal"><div class="step-num">01</div><h4>留下信息</h4><p>微信 / WhatsApp 联系，告诉我想约什么服务、目前最关心的问题。</p></div>
+          <div class="process-step reveal reveal-delay-1"><div class="step-num">02</div><h4>确认时间</h4><p>看排期表选一个时间。咨询前一天我会再确认一次。</p></div>
+          <div class="process-step reveal reveal-delay-2"><div class="step-num">03</div><h4>正式咨询</h4><p>视频或当面进行。结束前会确保你拿到了来时想要的几个答案。</p></div>
+          <div class="process-step reveal reveal-delay-3"><div class="step-num">04</div><h4>事后跟进</h4><p>三天内整理一份摘要发给你。一个月内有补充问题可以免费追问。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="compare">
+      <div class="container">
+        <div class="compare-header reveal">
+          <p class="section-label">不知道选哪个？</p>
+          <h2>三秒钟快速对照</h2>
+          <p>大多数人来找我是为了一个具体的问题。看看哪一栏更接近你现在想问的。</p>
+        </div>
+        <div class="compare-table reveal reveal-delay-1">
+          <div class="compare-row head"><div>服务</div><div>适合谁</div><div>能回答什么</div><div>价格</div></div>
+          <div class="compare-row"><div>论命</div><div>有具体困惑、想看清自己</div><div>性格、关系、近一两年走势</div><div>$300</div></div>
+          <div class="compare-row"><div>择日</div><div>有重要决定要在某天做</div><div>哪一天 / 哪个时辰更合适</div><div>$200</div></div>
+          <div class="compare-row"><div>取名</div><div>新生儿、想改名、新公司</div><div>三个备选名字，附说明</div><div>$800</div></div>
+          <div class="compare-row"><div>风水</div><div>新搬家、办公不顺、选房</div><div>空间问题与具体调整</div><div>$1,000 起</div></div>
+          <div class="compare-row"><div>符箓</div><div>已咨询过、想加一层辅助</div><div>—（辅助类）</div><div>$120 起</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="container">
+        <div class="compare-header reveal">
+          <p class="section-label">常见问题</p>
+          <h2>预约前你可能想知道</h2>
+        </div>
+        <div class="faq-grid">
+          <details class="faq-item"><summary class="faq-q">第一次找你咨询要准备什么？<span class="marker">+</span></summary><p class="faq-a">出生年月日、出生时间（精确到时辰）、出生地。如果想问家人或伴侣的事，请也带上他们的出生信息。同时把你最想问的 2 - 3 个具体问题写下来。</p></details>
+          <details class="faq-item"><summary class="faq-q">不知道自己几点出生怎么办？<span class="marker">+</span></summary><p class="faq-a">可以问家里长辈，或翻看出生证。如果实在找不到，我会用「定盘」的方式根据你过往的人生经历来反推时辰，但需要在咨询前多花 15 分钟。</p></details>
+          <details class="faq-item"><summary class="faq-q">视频咨询和当面咨询有差别吗？<span class="marker">+</span></summary><p class="faq-a">就咨询本身没差别，命盘是一样的看法。当面好处是能多聊一些细节，视频好处是省时间。看你方便。</p></details>
+          <details class="faq-item"><summary class="faq-q">咨询能录音吗？<span class="marker">+</span></summary><p class="faq-a">可以。我也会给你一份事后摘要，方便回顾。但请勿外传给第三方。</p></details>
+          <details class="faq-item"><summary class="faq-q">命理结果会不会让我不开心？<span class="marker">+</span></summary><p class="faq-a">我的工作方式是不夸大也不恐吓。即便看到不利的运势，我也会和你一起想怎么应对，而不是甩一句"今年别动"就走人。</p></details>
+          <details class="faq-item"><summary class="faq-q">退款政策？<span class="marker">+</span></summary><p class="faq-a">咨询前 48 小时取消可全额退款，48 小时内可改期一次。咨询开始后不退。</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="container">
+        <h2 class="reveal">还在犹豫？先聊聊。</h2>
+        <p class="reveal reveal-delay-1">不收咨询费的初步沟通也可以，告诉我你现在的困惑，我帮你判断哪种服务最合适。</p>
+        <div class="cta-band-btns reveal reveal-delay-2">
+          <a href="contact.html#book" class="btn-primary">预约咨询</a>
+          <button class="btn-ghost" style="color:rgba(245,239,230,0.85);border-color:rgba(245,239,230,0.25);" onclick="openWeChatModal()">先聊聊</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="assets/logo-recolored.png" alt="禧安堂" style="height:32px;width:auto;display:block;margin-bottom:12px;opacity:0.85;filter:brightness(0) invert(1) sepia(1) saturate(0.4) brightness(1.2);" />
+          <p>安妍老师的命理之家。用紫微斗数、八字、风水，陪你看清当下，安顿未来。</p>
+        </div>
+        <div class="footer-col"><h5>服务</h5><ul><li><a href="services.html#divination">论命</a></li><li><a href="services.html#naming">取名</a></li><li><a href="services.html#fengshui">风水</a></li></ul></div>
+        <div class="footer-col"><h5>课程</h5><ul><li><a href="courses.html#dageng">大耕老师课程</a></li><li><a href="courses.html#anyan">安妍老师课程</a></li></ul></div>
+        <div class="footer-col"><h5>更多</h5><ul><li><a href="about.html">关于安妍老师</a></li><li><a href="journal.html">文章</a></li><li><a href="contact.html">联系</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 禧安堂 Xiantang. All rights reserved.</p>
+        <div class="footer-legal"><a href="#">隐私政策</a><a href="#">服务条款</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="mobile-cta">
+    <div class="mobile-cta-inner">
+      <a href="https://wa.me/" class="btn-wa" target="_blank">WhatsApp</a>
+      <button class="btn-wechat" onclick="openWeChatModal()">微信咨询</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="wechat-modal" onclick="handleModalBackdropClick(event)">
+    <div class="modal-box">
+      <h3>微信咨询</h3>
+      <p>扫码添加安妍老师微信<br />备注「咨询」</p>
+      <div class="modal-qr img-placeholder" style="border-radius:8px;font-size:11px;">微信二维码<br />（待上传）</div>
+      <button class="modal-close" onclick="closeWeChatModal()">关闭</button>
+    </div>
+  </div>
+
+  <script src="assets/site.js"></script>
+</body>
+</html>

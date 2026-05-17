@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>课程详情 — 禧安堂</title>
+  <meta name="description" content="禧安堂课程详情页。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/site.css" />
+  <style>
+    body { padding-bottom: 88px; }
+    @media (max-width: 768px) { body { padding-bottom: 96px; } }
+
+    #site-nav { background: rgba(245, 239, 230, 0.96); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--gray-4); }
+
+    /* Loading state */
+    #course-app { min-height: 60vh; }
+    #course-app.loading { display: flex; align-items: center; justify-content: center; padding: 160px 24px; }
+    .loader {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 16px; color: var(--gray-3);
+      font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
+    }
+    .loader::before {
+      content: ''; width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-4);
+      border-top-color: var(--terracotta);
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Error state */
+    .err-box {
+      max-width: 480px; margin: 160px auto;
+      padding: 32px; text-align: center;
+      background: #fff; border: 1px solid var(--gray-4); border-radius: 16px;
+    }
+    .err-box h3 { font-size: 18px; color: var(--plum); margin-bottom: 8px; }
+    .err-box p { font-size: 14px; color: var(--gray-2); margin-bottom: 16px; line-height: 1.7; }
+    .err-box code { background: var(--cream); padding: 2px 8px; border-radius: 4px; font-size: 12px; color: var(--terracotta); }
+
+    /* ── Course Hero ── */
+    .course-hero { padding: 132px 0 56px; text-align: center; }
+    .course-hero-inner { max-width: 980px; margin: 0 auto; padding: 0 48px; }
+    @media (max-width: 768px) { .course-hero { padding: 108px 0 40px; } .course-hero-inner { padding: 0 24px; } }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--gray-3); text-decoration: none;
+      letter-spacing: 0.06em; margin-bottom: 24px;
+    }
+    .back-link:hover { color: var(--terracotta); }
+    .course-pills {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-bottom: 28px; flex-wrap: wrap; justify-content: center;
+    }
+    .pill-cat {
+      display: inline-flex; align-items: center;
+      background: var(--honey); color: #fff;
+      padding: 7px 18px; border-radius: 100px;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+    }
+    .pill-teacher {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #fff; border: 1px solid var(--gray-4);
+      padding: 5px 16px 5px 5px; border-radius: 100px;
+      font-size: 13px; color: var(--plum); letter-spacing: 0.04em;
+    }
+    .pill-teacher .avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--terracotta-light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif SC', serif; font-weight: 700;
+      color: var(--terracotta); font-size: 13px; overflow: hidden;
+    }
+    .pill-teacher .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .course-hero h1 {
+      font-size: clamp(36px, 5.4vw, 72px);
+      font-weight: 900; letter-spacing: 0.04em; line-height: 1.1;
+      color: var(--plum); margin-bottom: 24px;
+    }
+    .course-hero h1 em { font-style: normal; color: var(--terracotta); }
+    .course-hero-summary {
+      font-size: 16px; color: var(--gray-2); line-height: 1.7;
+      max-width: 620px; margin: 0 auto 32px;
+    }
+    .course-hero-meta {
+      display: inline-flex; gap: 28px; padding: 16px 32px;
+      border-top: 1px solid var(--gray-4); border-bottom: 1px solid var(--gray-4);
+      flex-wrap: wrap; justify-content: center;
+    }
+    .course-meta-item { text-align: center; }
+    .course-meta-item .label {
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gray-3); margin-bottom: 6px;
+    }
+    .course-meta-item .value {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 15px; font-weight: 700; color: var(--plum);
+    }
+
+    /* ── Cover ── */
+    .course-cover-wrap { max-width: 1080px; margin: 32px auto 0; padding: 0 48px; }
+    @media (max-width: 768px) { .course-cover-wrap { padding: 0 24px; } }
+    .course-cover-frame {
+      aspect-ratio: 16/9; border-radius: 20px; overflow: hidden;
+      background: var(--plum); position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .course-cover-frame::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 70% 30%, rgba(194,96,63,0.4) 0%, transparent 55%),
+                  radial-gradient(circle at 15% 80%, rgba(201,154,63,0.22) 0%, transparent 55%);
+    }
+    .course-cover-frame img,
+    .course-cover-frame video {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
+    }
+    .course-cover-frame img + ::before { display: none; }
+    .course-cover-frame svg { width: 26%; height: 26%; opacity: 0.85; position: relative; z-index: 1; }
+    .course-cover-frame .cover-stamp {
+      position: absolute; top: 24px; left: 24px;
+      font-family: 'Courier New', monospace; font-size: 11px;
+      letter-spacing: 0.18em; color: rgba(245,239,230,0.55); z-index: 2;
+    }
+    .course-cover-frame .cover-title {
+      position: absolute; bottom: 32px; left: 32px;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 32px; font-weight: 900; color: var(--cream);
+      letter-spacing: 0.06em; line-height: 1.1; z-index: 2;
+    }
+    @media (max-width: 600px) {
+      .course-cover-frame .cover-title { font-size: 22px; bottom: 18px; left: 18px; }
+      .course-cover-frame .cover-stamp { top: 16px; left: 18px; }
+    }
+
+    /* ── Body (markdown rendered here) ── */
+    .course-body {
+      max-width: 820px; margin: 0 auto;
+      padding: 96px 48px var(--section-pad);
+    }
+    @media (max-width: 768px) { .course-body { padding: 64px 24px var(--section-pad-sm); } }
+
+    .course-body h2 {
+      font-size: clamp(28px, 3.2vw, 40px); font-weight: 900;
+      color: var(--plum); margin: 56px 0 28px;
+      letter-spacing: 0.04em; padding-top: 56px;
+      border-top: 1px solid var(--gray-4);
+    }
+    .course-body > h2:first-child,
+    .course-body > *:first-child { padding-top: 0; border-top: none; margin-top: 0; }
+    .course-body h2::after {
+      content: '：'; color: var(--terracotta);
+    }
+    .course-body p {
+      font-size: 16px; line-height: 1.95; color: var(--gray-2);
+      letter-spacing: 0.02em; margin-bottom: 16px;
+    }
+    /* Numbered list (课程内容) */
+    .course-body ol {
+      list-style: none; counter-reset: cl;
+      display: grid; gap: 14px; padding: 0;
+    }
+    .course-body ol > li {
+      counter-increment: cl;
+      padding-left: 40px; position: relative;
+      font-size: 16px; color: var(--gray-2); line-height: 1.75;
+    }
+    .course-body ol > li::before {
+      content: counter(cl) ".";
+      position: absolute; left: 0; top: 0;
+      font-family: 'Noto Serif SC', serif;
+      font-weight: 700; color: var(--terracotta);
+      font-size: 16px; width: 28px;
+    }
+    /* Outline: h3 chapter headers */
+    .course-body h3 {
+      background: rgba(245, 239, 230, 0.6);
+      padding: 14px 24px;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 13px; font-weight: 700; color: var(--terracotta);
+      letter-spacing: 0.14em;
+      border: 1px solid var(--gray-4);
+      border-bottom: none;
+      margin-top: 0;
+    }
+    .course-body h3:first-of-type { border-radius: 12px 12px 0 0; }
+    .course-body h3 + ul {
+      list-style: none; padding: 0; margin: 0;
+      border-left: 1px solid var(--gray-4);
+      border-right: 1px solid var(--gray-4);
+    }
+    .course-body h3 + ul > li {
+      padding: 14px 24px;
+      background: #fff;
+      font-size: 14px; color: var(--plum);
+      line-height: 1.55;
+      border-bottom: 1px solid var(--gray-4);
+      font-family: 'Noto Sans SC', sans-serif;
+      letter-spacing: 0.02em;
+    }
+    /* Style the leading code (e.g. "01-1") in monospace */
+    .course-body h3 + ul > li::first-letter,
+    .course-body h3 + ul > li { /* fallback */ }
+    .course-body h3 + ul > li b,
+    .course-body h3 + ul > li .code {
+      font-family: 'Courier New', monospace;
+      color: var(--honey); font-weight: 700; letter-spacing: 0.08em;
+      margin-right: 8px;
+    }
+    /* Last ul after last h3 gets rounded bottom */
+    .course-body > h3 ~ *:last-child { border-radius: 0 0 12px 12px; border-bottom: 1px solid var(--gray-4); }
+
+    /* Plain unordered list (not under h3) */
+    .course-body > ul {
+      list-style: none; padding: 0;
+      display: grid; gap: 10px;
+    }
+    .course-body > ul > li {
+      padding-left: 22px; position: relative;
+      font-size: 15px; color: var(--gray-2); line-height: 1.7;
+    }
+    .course-body > ul > li::before {
+      content: ''; position: absolute; left: 0; top: 11px;
+      width: 12px; height: 1px; background: var(--terracotta);
+    }
+
+    /* Instructor block + FAQ (static, after markdown body) */
+    .post-body {
+      max-width: 820px; margin: 0 auto;
+      padding: 0 48px var(--section-pad);
+    }
+    @media (max-width: 768px) { .post-body { padding: 0 24px var(--section-pad-sm); } }
+    .post-section { padding: 56px 0; border-top: 1px solid var(--gray-4); }
+    .post-section h2 {
+      font-size: clamp(28px, 3.2vw, 40px); font-weight: 900;
+      color: var(--plum); margin-bottom: 28px; letter-spacing: 0.04em;
+    }
+    .post-section h2::after { content: '：'; color: var(--terracotta); }
+
+    .perk-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px;
+    }
+    @media (max-width: 600px) { .perk-grid { grid-template-columns: 1fr; } }
+    .perk-card {
+      padding: 22px 24px; background: #fff;
+      border: 1px solid var(--gray-4); border-radius: 12px;
+    }
+    .perk-card .icon { color: var(--terracotta); width: 24px; height: 24px; margin-bottom: 12px; }
+    .perk-card h4 { font-size: 15px; font-weight: 700; color: var(--plum); margin-bottom: 4px; }
+    .perk-card p { font-size: 13px; color: var(--gray-2); line-height: 1.65; }
+
+    .instructor-card {
+      display: grid; grid-template-columns: 96px 1fr;
+      gap: 24px; padding: 28px;
+      background: #fff; border: 1px solid var(--gray-4); border-radius: 16px;
+      align-items: center;
+    }
+    @media (max-width: 600px) { .instructor-card { grid-template-columns: 64px 1fr; gap: 16px; padding: 20px; } }
+    .instructor-card .avatar {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: var(--terracotta-light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 38px; font-weight: 900; color: var(--terracotta);
+      overflow: hidden;
+    }
+    @media (max-width: 600px) { .instructor-card .avatar { width: 64px; height: 64px; font-size: 26px; } }
+    .instructor-card .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .instructor-meta .role {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--sage); margin-bottom: 4px;
+    }
+    .instructor-meta h4 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 20px; font-weight: 700; color: var(--plum); margin-bottom: 8px;
+    }
+    .instructor-meta p { font-size: 14px; color: var(--gray-2); line-height: 1.7; }
+
+    .faq-list {
+      display: grid; gap: 1px; background: var(--gray-4);
+      border: 1px solid var(--gray-4); border-radius: 12px; overflow: hidden;
+    }
+    .faq-row { background: #fff; padding: 22px 28px; }
+    .faq-row summary {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 16px; list-style: none; cursor: pointer;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px; font-weight: 700; color: var(--plum);
+    }
+    .faq-row summary::-webkit-details-marker { display: none; }
+    .faq-row summary .marker {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+      border: 1px solid var(--gray-4);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--terracotta); font-size: 14px;
+      transition: transform 0.25s var(--ease-out);
+    }
+    .faq-row[open] summary .marker { transform: rotate(45deg); }
+    .faq-row .answer { margin-top: 14px; font-size: 14px; color: var(--gray-2); line-height: 1.8; }
+
+    /* Sticky buy bar */
+    #buy-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(245, 239, 230, 0.96); backdrop-filter: blur(16px);
+      border-top: 1px solid var(--gray-4); padding: 16px 0;
+    }
+    .buy-bar-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    @media (max-width: 768px) { .buy-bar-inner { padding: 0 16px; gap: 12px; } }
+    .deal-label { font-size: 11px; letter-spacing: 0.16em; color: var(--terracotta); margin-bottom: 4px; }
+    .price-row { display: flex; align-items: baseline; gap: 12px; }
+    .price-now {
+      font-family: 'Noto Serif SC', serif; font-size: 26px; font-weight: 900;
+      color: var(--terracotta); letter-spacing: 0.02em;
+    }
+    @media (max-width: 600px) { .price-now { font-size: 20px; } }
+    .price-was { font-size: 14px; color: var(--gray-3); text-decoration: line-through; }
+    .buy-btn {
+      background: var(--plum); color: var(--cream);
+      padding: 16px 40px; font-family: inherit; font-size: 14px;
+      letter-spacing: 0.18em; border-radius: 100px; border: none;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .buy-btn:hover { background: var(--terracotta); }
+    @media (max-width: 600px) { .buy-btn { padding: 14px 24px; font-size: 13px; } }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" aria-label="主导航">
+    <a href="../index.html" class="nav-logo"><img src="../assets/logo-recolored.png" alt="禧安堂" style="height:44px;width:auto;display:block;" /></a>
+    <ul class="nav-links">
+      <li><a href="../index.html">首页</a></li>
+      <li><a href="../about.html">关于</a></li>
+      <li><a href="../services.html">服务</a></li>
+      <li><a href="../courses.html" class="active">课程</a></li>
+      <li><a href="../journal.html">文章</a></li>
+      <li><a href="../contact.html">联系</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-lang">EN</span>
+      <a href="../contact.html#book" class="nav-cta">预约咨询</a>
+    </div>
+  </nav>
+
+  <main>
+    <div id="course-app" class="loading">
+      <div class="loader">载入中</div>
+    </div>
+  </main>
+
+  <div id="buy-bar" style="display:none;">
+    <div class="buy-bar-inner">
+      <div>
+        <div class="deal-label">限时优惠价 · 至 <span data-bind="dealUntil"></span></div>
+        <div class="price-row">
+          <span class="price-now" data-bind="priceNow"></span>
+          <span class="price-was" data-bind="priceWas"></span>
+        </div>
+      </div>
+      <button class="buy-btn" onclick="alert('提交订单 — 接入支付通道')">提交订单</button>
+    </div>
+  </div>
+
+  <!-- Hero + body template (hidden until populated) -->
+  <template id="tpl-course">
+    <header class="course-hero">
+      <div class="course-hero-inner">
+        <a href="../courses.html" class="back-link">← 返回所有课程</a>
+        <div class="course-pills">
+          <span class="pill-cat" data-bind="category"></span>
+          <span class="pill-teacher">
+            <span class="avatar" data-teacher="avatar"></span>
+            <span data-teacher="name"></span>
+          </span>
+        </div>
+        <h1 data-bind-html="titleHtml"></h1>
+        <p class="course-hero-summary" data-bind="summary"></p>
+        <div class="course-hero-meta">
+          <div class="course-meta-item"><div class="label">形式</div><div class="value" data-bind="format"></div></div>
+          <div class="course-meta-item"><div class="label">时长</div><div class="value" data-bind="duration"></div></div>
+          <div class="course-meta-item"><div class="label">回看</div><div class="value" data-bind="playback"></div></div>
+          <div class="course-meta-item"><div class="label">难度</div><div class="value" data-bind="difficulty"></div></div>
+        </div>
+      </div>
+      <div class="course-cover-wrap">
+        <div class="course-cover-frame" id="cover-frame">
+          <!-- filled by JS: img / video / default SVG -->
+        </div>
+      </div>
+    </header>
+
+    <div class="course-body" id="course-body">
+      <!-- markdown rendered here -->
+    </div>
+
+    <div class="post-body">
+      <section class="post-section">
+        <h2>课程内含</h2>
+        <div class="perk-grid">
+          <div class="perk-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="13" rx="1.5"/><polygon points="10,9 16,12 10,15" fill="currentColor" stroke="none"/></svg>
+            <h4 data-perk="0-title">视频回放</h4>
+            <p data-perk="0-body">分章节录制，可暂停、重看、加速。</p>
+          </div>
+          <div class="perk-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11l3 3v13a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/><line x1="8" y1="11" x2="16" y2="11"/><line x1="8" y1="15" x2="14" y2="15"/></svg>
+            <h4>电子讲义 + 练习册</h4>
+            <p>PDF 下载，配套案例练习题与答案。</p>
+          </div>
+          <div class="perk-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>
+            <h4 data-perk="2-title">永久回看</h4>
+            <p>购买即拥有，回放期内不限次数。</p>
+          </div>
+          <div class="perk-card">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/><polyline points="9 12 11 14 15 10"/></svg>
+            <h4>结业证书</h4>
+            <p>完成 80% 课程后可获得电子证书。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="post-section">
+        <h2>关于讲师</h2>
+        <div class="instructor-card">
+          <div class="avatar" data-teacher="avatar-large"></div>
+          <div class="instructor-meta">
+            <p class="role" data-teacher="role"></p>
+            <h4 data-teacher="name"></h4>
+            <p data-teacher="bio"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="post-section">
+        <h2>常见问题</h2>
+        <div class="faq-list">
+          <details class="faq-row">
+            <summary>购买后多久可以开始？<span class="marker">+</span></summary>
+            <p class="answer">付款成功后 1 小时内开通账号，邮箱会收到登入链接。即刻就可以开始。</p>
+          </details>
+          <details class="faq-row">
+            <summary>课程有答疑吗？<span class="marker">+</span></summary>
+            <p class="answer">每门课的答疑方式不同，详情请看课程说明。如需深度 1 对 1，可另约安妍老师咨询。</p>
+          </details>
+          <details class="faq-row">
+            <summary>可以申请退款吗？<span class="marker">+</span></summary>
+            <p class="answer">购买后 7 天内、且观看进度不超过 20% 可申请全额退款。线下课程开课前 14 天前可全退。</p>
+          </details>
+          <details class="faq-row">
+            <summary>支持哪些支付方式？<span class="marker">+</span></summary>
+            <p class="answer">支持 PayNow、信用卡、支付宝、微信支付。海外学员请用信用卡。</p>
+          </details>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <!-- Marked.js for markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@14.1.3/marked.min.js"></script>
+  <script src="../assets/site.js"></script>
+  <script>
+    // ── Frontmatter parser ──
+    function parseFrontmatter(text) {
+      const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+      if (!m) return { meta: {}, body: text };
+      const meta = {};
+      m[1].split(/\r?\n/).forEach(line => {
+        const idx = line.indexOf(':');
+        if (idx > 0) {
+          const k = line.slice(0, idx).trim();
+          const v = line.slice(idx + 1).trim();
+          meta[k] = v;
+        }
+      });
+      return { meta, body: m[2] };
+    }
+
+    // ── Default abstract cover (SVG + headline) ──
+    function defaultCover(meta) {
+      const stamp = meta.coverStamp || '';
+      const h1 = meta.coverHeadline || '';
+      const h2 = meta.coverHeadline2 || '';
+      return `
+        <span class="cover-stamp">${stamp}</span>
+        <svg viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="42" stroke="#F5EFE6" stroke-width="1"/>
+          <circle cx="50" cy="50" r="28" stroke="#C99A3F" stroke-width="0.8" stroke-dasharray="2 3"/>
+          <circle cx="50" cy="50" r="14" fill="#C2603F" opacity="0.65"/>
+          <circle cx="50" cy="50" r="4" fill="#F5EFE6"/>
+        </svg>
+        <div class="cover-title">${h1}${h2 ? '<br/>' + h2 : ''}</div>
+      `;
+    }
+
+    // ── Post-process outline list items: detect "01-1 · title · ~82 分钟" pattern ──
+    function decorateOutlineItems(root) {
+      root.querySelectorAll('h3 + ul > li, h3 ~ ul > li').forEach(li => {
+        const text = li.textContent.trim();
+        // Match leading code like "01-1" or "07-2" or "Day 1 · 上午 09:30"
+        const m = text.match(/^([\w-]+(?:\s*·\s*[\w:上下午]+)?)\s*[·•|]\s*(.+)$/);
+        if (m) {
+          li.innerHTML = `<b class="code">${m[1].trim()}</b>${m[2].trim()}`;
+        }
+      });
+    }
+
+    // ── Group consecutive h3 + ul pairs into a single outline-block visual ──
+    // (CSS already styles them, just need to ensure the last ul has bottom radius)
+    function finalizeOutlineRadius(root) {
+      const groups = [];
+      let current = null;
+      root.childNodes.forEach(node => {
+        if (node.nodeType !== 1) return;
+        if (node.tagName === 'H3') {
+          current = { h3: node, uls: [] };
+          groups.push(current);
+        } else if (current && node.tagName === 'UL') {
+          current.uls.push(node);
+        } else {
+          current = null;
+        }
+      });
+      groups.forEach((g, gi) => {
+        const lastG = (gi === groups.length - 1);
+        g.uls.forEach((ul, ui) => {
+          const isLastUl = (ui === g.uls.length - 1);
+          if (lastG && isLastUl) {
+            ul.style.borderRadius = '0 0 12px 12px';
+            ul.style.borderBottom = '1px solid var(--gray-4)';
+          }
+        });
+      });
+    }
+
+    // ── Title with emphasis ──
+    function formatTitleHtml(meta) {
+      const title = meta.title || '';
+      const em = meta.emphasis || '';
+      if (em && title.endsWith(em)) {
+        const main = title.slice(0, -em.length).replace(/[,，、 ]+$/, '');
+        return `${escapeHtml(main)}<br /><em>${escapeHtml(em)}</em>`;
+      }
+      // Split on first 、 or comma if no emphasis
+      return escapeHtml(title);
+    }
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    }
+
+    // ── Main loader ──
+    (async () => {
+      const params = new URLSearchParams(location.search);
+      const slug = params.get('slug') || 'dg-ziwei-intro';
+
+      try {
+        const [teachers, mdRes] = await Promise.all([
+          fetch('data/teachers.json').then(r => r.json()),
+          fetch(`data/${slug}.md`).then(r => {
+            if (!r.ok) throw new Error('未找到课程');
+            return r.text();
+          }),
+        ]);
+
+        const { meta, body } = parseFrontmatter(mdRes);
+        const teacher = teachers[meta.teacher] || { name: meta.teacher || '禧安堂', avatar: '?', role: '', bio: '' };
+
+        // Clone template
+        const tpl = document.getElementById('tpl-course');
+        const app = document.getElementById('course-app');
+        app.classList.remove('loading');
+        app.innerHTML = '';
+        app.appendChild(tpl.content.cloneNode(true));
+
+        // Bind meta values
+        document.querySelectorAll('[data-bind]').forEach(el => {
+          const k = el.getAttribute('data-bind');
+          if (meta[k] !== undefined) el.textContent = meta[k];
+        });
+        const titleEl = document.querySelector('[data-bind-html="titleHtml"]');
+        if (titleEl) titleEl.innerHTML = formatTitleHtml(meta);
+
+        // Bind teacher
+        document.querySelectorAll('[data-teacher]').forEach(el => {
+          const k = el.getAttribute('data-teacher');
+          if (k === 'avatar' || k === 'avatar-large') {
+            if (teacher.avatarImage) {
+              el.innerHTML = `<img src="${teacher.avatarImage}" alt="${teacher.name}" />`;
+            } else {
+              el.textContent = teacher.avatar;
+            }
+          } else if (k === 'name') {
+            el.textContent = teacher.name;
+          } else if (k === 'role') {
+            el.textContent = teacher.role;
+          } else if (k === 'bio') {
+            el.textContent = teacher.bio;
+          }
+        });
+
+        // Cover
+        const cover = document.getElementById('cover-frame');
+        if (meta.coverVideo) {
+          cover.innerHTML = `<video src="${meta.coverVideo}" autoplay loop muted playsinline></video>` + defaultCover(meta).split('</svg>')[1].split('</div>')[0] + '</div>';
+        } else if (meta.coverImage) {
+          cover.innerHTML = `<img src="${meta.coverImage}" alt="${meta.title || ''}" /><span class="cover-stamp">${meta.coverStamp || ''}</span>`;
+        } else {
+          cover.innerHTML = defaultCover(meta);
+        }
+
+        // Render markdown body
+        const html = marked.parse(body);
+        const bodyEl = document.getElementById('course-body');
+        bodyEl.innerHTML = html;
+        decorateOutlineItems(bodyEl);
+        finalizeOutlineRadius(bodyEl);
+
+        // Show buy bar
+        document.getElementById('buy-bar').style.display = '';
+
+        // Title tag
+        document.title = `${meta.title || '课程'} — 禧安堂`;
+
+      } catch (err) {
+        console.error(err);
+        const app = document.getElementById('course-app');
+        app.classList.remove('loading');
+        app.innerHTML = `
+          <div class="err-box">
+            <h3>找不到这门课程</h3>
+            <p>没有找到 <code>${escapeHtml(slug)}</code> 这门课的内容。可能链接有误，或者课程已下架。</p>
+            <a href="../courses.html" class="btn-ghost" style="margin-top: 8px;">返回所有课程</a>
+          </div>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>
