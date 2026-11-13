@@ -25,35 +25,35 @@
     // Popup stops showing after this moment (SGT).
     showUntil: '2026-12-15T23:59:59+08:00',
 
-    heading: { zh: '近期活动 · 安妍老师', en: 'Upcoming with 安妍老师 (An Yan)' },
+    heading: { zh: '紫微牌卡 · 两日速成班', en: 'Zi Wei Cards · 2-Day Intensive' },
     intro: {
-      zh: '年末工作坊开放报名，早鸟名额优惠中。',
-      en: 'Year-end workshops are open for registration, with early-bird pricing.'
+      zh: '2026 年末限定小班实体课。两个周日，从零基础到能独立为自己和朋友解牌——不用排盘，也能读懂紫微。',
+      en: 'A year-end, in-person small class in Singapore. Two Sundays, from zero to reading the cards for yourself and friends — no chart-casting needed.'
     },
 
     // One entry per event / workshop. Remove or add entries freely.
-    // 【待填】 = needs 安妍老师's real details before going live.
     events: [
       {
-        title: { zh: '【待填】工作坊名称', en: '[TBC] Workshop title' },
-        date: { zh: '【待填】2026 年 12 月 X 日（周X）', en: '[TBC] Sat, X Dec 2026' },
-        time: { zh: '【待填】下午 2:00 – 5:00', en: '[TBC] 2:00 – 5:00 pm' },
-        place: { zh: '【待填】新加坡 · 地点 / 线上', en: '[TBC] Singapore venue / Online' },
+        title: { zh: '安妍老师主讲 · 新加坡线下小班', en: 'Taught by 安妍老师 (An Yan) · Singapore, in person' },
+        date: { zh: '12月6日 & 13日（周日）', en: 'Sun 6 & Sun 13 Dec 2026' },
+        time: { zh: '10:00am – 5:00pm', en: '10:00am – 5:00pm' },
+        place: { zh: '新加坡线下 · 限 15 人，额满即止', en: 'Singapore · 15 seats only' },
         currency: 'SGD',
-        earlyBirdPrice: 0,        // 【待填】 e.g. 188
-        regularPrice: 0,          // 【待填】 e.g. 268
-        earlyBirdUntil: '2026-11-30T23:59:59+08:00', // 【待填】 early-bird deadline (SGT)
-        seats: { zh: '', en: '' },                   // optional, e.g. 名额 30 位
-        signupUrl: 'contact.html'                    // 【待填】 registration form link
+        earlyBirdPrice: 588,
+        regularPrice: 880,
+        earlyBirdUntil: '2026-11-30T23:59:59+08:00',
+        // Extra price line, shown only during early bird.
+        earlyNote: { zh: '两人同行每人 S$538 · 去年旧生 S$50', en: 'Two together: S$538 each · Returning students: S$50' },
+        note: { zh: '去年旧生 S$50（行政及资料费）', en: 'Returning students: S$50 (admin & materials)' },
+        bonus: { zh: '含一对一牌卡解读、牌卡一副、一年内免费重听等福利，总价值 S$1,638', en: 'Includes a 1-on-1 card reading, a card deck, free re-attendance for a year and more — worth S$1,638' },
+        signupUrl: 'https://wa.me/6583188066?text=%E5%AE%89%E5%A6%8D%E8%80%81%E5%B8%88%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E6%8A%A5%E5%90%8D%E3%80%8C%E7%B4%AB%E5%BE%AE%E7%89%8C%E5%8D%A1%E4%B8%A4%E6%97%A5%E9%80%9F%E6%88%90%E7%8F%AD%E3%80%8D%EF%BC%8812%E6%9C%886%E6%97%A5%20%26%2013%E6%97%A5%EF%BC%89%E3%80%82',
+        detailsUrl: '/courses/course.html?slug=zw-cards-2026'
       }
     ],
 
     // Shown under the list. Leave '' to hide.
-    footnote: {
-      zh: '有疑问？WhatsApp +65 8318 8066',
-      en: 'Questions? WhatsApp +65 8318 8066'
-    },
-    footnoteUrl: 'https://wa.me/6583188066'
+    footnote: { zh: '', en: '' },
+    footnoteUrl: ''
   };
 
   // ───────────────────────────────────────────────────────────────────────
@@ -125,6 +125,9 @@
     '.xt-ev-now{font-family:"Noto Serif SC",serif;font-size:24px;font-weight:700;color:#C2603F}',
     '.xt-ev-was{font-size:14px;color:#8A7F84;text-decoration:line-through}',
     '.xt-ev-left{flex-basis:100%;font-size:12px;color:#C2603F}',
+    '.xt-ev-note{flex-basis:100%;font-size:12px;color:#4A4045}',
+    '.xt-ev-bonus{font-size:13px;line-height:1.7;color:#4A4045;background:rgba(201,154,63,.12);border-radius:8px;padding:10px 12px;margin:0 0 14px}',
+    '.xt-ev-more{display:block;text-align:center;margin-top:10px;font-size:13px;color:#3B2A35;text-underline-offset:3px}',
     '.xt-ev-cta{display:block;text-align:center;text-decoration:none;background:#C2603F;color:#fff;font-size:15px;',
     'letter-spacing:.06em;border-radius:8px;padding:13px 16px;transition:background .2s}',
     '.xt-ev-cta:hover,.xt-ev-cta:focus-visible{background:#a94f31;outline:none}',
@@ -141,6 +144,7 @@
     early: { zh: '早鸟价', en: 'Early bird' },
     price: { zh: '报名费', en: 'Fee' },
     signup: { zh: '立即报名', en: 'Register now' },
+    details: { zh: '查看课程详情', en: 'Full course details' },
     later: { zh: '稍后再看', en: 'Maybe later' },
     close: { zh: '关闭', en: 'Close' },
     lastDay: { zh: '早鸟优惠今天截止', en: 'Early-bird price ends today' },
@@ -156,10 +160,12 @@
       return '<p class="xt-ev-price"><span class="xt-ev-tag">' + esc(tr(T.early)) + '</span>' +
         '<span class="xt-ev-now">' + esc(money(ev.currency, ev.earlyBirdPrice)) + '</span>' +
         (ev.regularPrice ? '<span class="xt-ev-was">' + esc(money(ev.currency, ev.regularPrice)) + '</span>' : '') +
-        '<span class="xt-ev-left">' + esc(left) + '</span></p>';
+        '<span class="xt-ev-left">' + esc(left) + '</span>' +
+        (tr(ev.earlyNote) ? '<span class="xt-ev-note">' + esc(tr(ev.earlyNote)) + '</span>' : '') + '</p>';
     }
     if (!ev.regularPrice) return '';
-    return '<p class="xt-ev-price"><span class="xt-ev-now">' + esc(money(ev.currency, ev.regularPrice)) + '</span></p>';
+    return '<p class="xt-ev-price"><span class="xt-ev-now">' + esc(money(ev.currency, ev.regularPrice)) + '</span>' +
+      (tr(ev.note) ? '<span class="xt-ev-note">' + esc(tr(ev.note)) + '</span>' : '') + '</p>';
   }
 
   function build() {
@@ -171,8 +177,10 @@
         '<h3 class="xt-ev-t">' + esc(tr(ev.title)) + '</h3>' +
         (meta ? '<p class="xt-ev-meta">' + meta + '</p>' : '') +
         priceHtml(ev) +
+        (tr(ev.bonus) ? '<p class="xt-ev-bonus">' + esc(tr(ev.bonus)) + '</p>' : '') +
         '<a class="xt-ev-cta" data-i="' + i + '" href="' + esc(ev.signupUrl) + '"' +
         (ext ? ' target="_blank" rel="noopener"' : '') + '>' + esc(tr(T.signup)) + ' →</a>' +
+        (ev.detailsUrl ? '<a class="xt-ev-more" href="' + esc(ev.detailsUrl) + '">' + esc(tr(T.details)) + '</a>' : '') +
         '</li>';
     }).join('');
 
