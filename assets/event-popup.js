@@ -25,6 +25,10 @@
     // Popup stops showing after this moment (SGT).
     showUntil: '2026-12-15T23:59:59+08:00',
 
+    // Optional photo across the top of the popup ('' to hide). 2:1, ~920×460.
+    image: '/courses/images/zw-cards-popup.jpg',
+    imageAlt: { zh: '安妍老师紫微牌卡课堂', en: 'An Yan teaching a Zi Wei cards class' },
+
     heading: { zh: '紫微牌卡 · 两日速成班', en: 'Zi Wei Cards · 2-Day Intensive' },
     intro: {
       zh: '2026 年末限定小班实体课。两个周日，从零基础到能独立为自己和朋友解牌——不用排盘，也能读懂紫微。',
@@ -41,7 +45,7 @@
         currency: 'SGD',
         earlyBirdPrice: 588,
         regularPrice: 880,
-        earlyBirdUntil: '2026-11-30T23:59:59+08:00',
+        earlyBirdUntil: '2026-12-06T23:59:59+08:00',  // after this: regular S$880 until the popup ends
         // Extra price line, shown only during early bird.
         earlyNote: { zh: '两人同行每人 S$538 · 去年旧生 S$50', en: 'Two together: S$538 each · Returning students: S$50' },
         note: { zh: '去年旧生 S$50（行政及资料费）', en: 'Returning students: S$50 (admin & materials)' },
@@ -108,12 +112,14 @@
     'transform:translateY(16px) scale(.98);transition:transform .45s cubic-bezier(.22,1,.36,1)}',
     '.xt-ev-open .xt-ev-box{transform:none}',
     '.xt-ev-top{background:#3B2A35;color:#F5EFE6;padding:28px 28px 22px;border-radius:16px 16px 0 0}',
+    '.xt-ev-img{display:block;width:100%;aspect-ratio:2/1;object-fit:cover;border-radius:16px 16px 0 0;background:#3B2A35}',
+    '.xt-ev-img + .xt-ev-top{border-radius:0;padding-top:20px}',
     '.xt-ev-kicker{font-size:11px;letter-spacing:.24em;color:#C99A3F;margin:0 0 10px;text-transform:uppercase}',
     '.xt-ev-h{font-family:"Noto Serif SC",serif;font-weight:700;font-size:22px;line-height:1.35;margin:0 0 8px;padding-right:32px}',
     '.xt-ev-intro{font-size:14px;line-height:1.7;margin:0;color:rgba(245,239,230,.75)}',
     '.xt-ev-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border:0;border-radius:50%;cursor:pointer;',
-    'background:rgba(245,239,230,.12);color:#F5EFE6;font-size:20px;line-height:36px;padding:0}',
-    '.xt-ev-x:hover,.xt-ev-x:focus-visible{background:rgba(245,239,230,.25);outline:none}',
+    'background:rgba(26,20,22,.45);color:#F5EFE6;font-size:20px;line-height:36px;padding:0;z-index:2}',
+    '.xt-ev-x:hover,.xt-ev-x:focus-visible{background:rgba(26,20,22,.7);outline:none}',
     '.xt-ev-list{padding:8px 28px 4px;margin:0;list-style:none}',
     '.xt-ev-item{padding:20px 0;border-bottom:1px solid #D9CFC4}',
     '.xt-ev-item:last-child{border-bottom:0}',
@@ -198,8 +204,9 @@
     back.className = 'xt-ev-back';
     back.innerHTML =
       '<div class="xt-ev-box" role="dialog" aria-modal="true" aria-labelledby="xt-ev-h">' +
+        '<button type="button" class="xt-ev-x" aria-label="' + esc(tr(T.close)) + '">×</button>' +
+        (CONFIG.image ? '<img class="xt-ev-img" src="' + esc(CONFIG.image) + '" alt="' + esc(tr(CONFIG.imageAlt)) + '" />' : '') +
         '<div class="xt-ev-top">' +
-          '<button type="button" class="xt-ev-x" aria-label="' + esc(tr(T.close)) + '">×</button>' +
           '<p class="xt-ev-kicker">' + esc(tr(T.kicker)) + '</p>' +
           '<h2 class="xt-ev-h" id="xt-ev-h">' + esc(tr(CONFIG.heading)) + '</h2>' +
           (tr(CONFIG.intro) ? '<p class="xt-ev-intro">' + esc(tr(CONFIG.intro)) + '</p>' : '') +

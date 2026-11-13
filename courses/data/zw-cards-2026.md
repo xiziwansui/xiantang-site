@@ -8,11 +8,12 @@ format: 新加坡线下 · 两个周日
 duration: 12月6日 & 13日（周日）10:00am – 5:00pm
 playback: 一年内免费重听
 difficulty: 零基础可学
-coverPosition: 50% 30%
+coverImage: images/zw-cards-cover.jpg
+coverPosition: 50% 60%
 priceNow: SGD 588
 priceWas: SGD 880
-dealLabel: 早鸟价 · 11月30日截止 · 限 15 人
-dealUntil: 11月30日
+dealLabel: 早鸟价 · 12月6日截止 · 限 15 人
+dealUntil: 12月6日
 signupLabel: 立即报名 · 线上付款
 signupUrl: /workshop-signup.html?slug=zw-cards-2026
 summary: 两个周日，从零基础到能独立为自己和朋友解牌。不用排盘，也能读懂紫微。2026 年末限定 · 新加坡小班实体课，限 15 人。
@@ -65,7 +66,7 @@ coverStamp: 安妍 · 2026 年末限定
 | | 学费 |
 |---|---|
 | 原价 | S$880 |
-| **早鸟价（11月30日前报名）** | **S$588** |
+| **早鸟价（12月6日前报名）** | **S$588** |
 | 两人同行（早鸟期内） | 每人 S$538 |
 | 去年旧生（行政及资料费） | S$50 |
 

@@ -189,8 +189,8 @@
           en: 'With 安妍老师 (An Yan) · Sun 6 & 13 Dec 2026, 10:00am – 5:00pm · Singapore, in person · 15 seats'
         },
         page: 'courses/course.html?slug=zw-cards-2026',
-        earlyBirdUntil: '2026-11-30T23:59:59+08:00',
-        closes: '2026-12-06T10:00:00+08:00',
+        earlyBirdUntil: '2026-12-06T23:59:59+08:00',
+        closes: '2026-12-16T00:00:00+08:00',
         price: { early: 588, regular: 880, pairEarly: 538, returning: 50 }
       }
     };
@@ -252,7 +252,7 @@
     var P = w.price;
     var tickets = [
       early
-        ? { id: 'standard', name: { zh: '早鸟价', en: 'Early bird' }, sub: { zh: '11月30日前报名', en: 'Register by 30 Nov' }, unit: P.early, seats: 1, was: P.regular }
+        ? { id: 'standard', name: { zh: '早鸟价', en: 'Early bird' }, sub: { zh: '12月6日前报名', en: 'Register by 6 Dec' }, unit: P.early, seats: 1, was: P.regular }
         : { id: 'standard', name: { zh: '标准票', en: 'Standard' }, sub: { zh: '一人', en: 'One person' }, unit: P.regular, seats: 1 }
     ];
     if (early) tickets.push({ id: 'pair', name: { zh: '两人同行', en: 'Two together' }, sub: { zh: '早鸟期内 · 每人 S$' + P.pairEarly + '，一次付两人', en: 'Early bird · S$' + P.pairEarly + ' each, pay for both' }, unit: P.pairEarly, seats: 2 });
