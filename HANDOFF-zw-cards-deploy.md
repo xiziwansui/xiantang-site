@@ -1,5 +1,7 @@
 # Handoff: publish 紫微牌卡两日速成班 popup + online sign-up to xiantang.life
 
+> **Already published the first round? Jump to [Update 2](#update-2--course-page-faq--button-2026-11-13).**
+
 You are running on the machine that holds the live xiantang.life site (likely
 `~/sites/xiantang.life`) and knows how it is deployed. A cloud session built and
 tested everything below; your job is to **add 5 files, make 3 small edits, publish,
@@ -148,3 +150,67 @@ Then ask the user to do one **real S$50 payment** (旧生 ticket) on
 - **After 15 Dec:** popup turns itself off; the script tag can stay or be removed.
 - Next workshop: add an entry to `lib/ziwei/workshops.ts` (ziwei repo) and to the
   `WORKSHOPS` / `CONFIG` blocks in `workshop-signup.html` and `assets/event-popup.js`.
+
+## Update 2 — course page FAQ + button (2026-11-13)
+
+Problem on the live course page (`courses/course.html?slug=zw-cards-2026`): the 常见问题 block
+is the template's default, written for video courses (「付款成功后 1 小时内开通账号…登入链接」,
+「观看进度不超过 20%」), which is wrong for an in-person class; and the button
+「立即报名 · 线上付款」 wraps to two lines on phones.
+
+Fix = 2 files:
+
+1. **`courses/course.html`** — add per-course FAQ support. **Edit, don't replace** (keep any
+   local changes). In the main `<script>`, find the line
+   `        // Course levels / 课程进阶 chart` and insert this block directly above it:
+
+```js
+        // Per-course FAQ (frontmatter: faq: 问题 :: 回答 || 问题 :: 回答 ...). Replaces the
+        // default FAQ, which is written for video courses (账号开通 / 观看进度 refunds).
+        if (meta.faq) {
+          const list = document.querySelector('.faq-list');
+          if (list) {
+            list.innerHTML = '';
+            meta.faq.split('||').forEach(item => {
+              const [q, a] = item.split('::').map(s => (s || '').trim());
+              if (!q) return;
+              const d = document.createElement('details');
+              d.className = 'faq-row';
+              const sm = document.createElement('summary');
+              sm.textContent = q;
+              const mk = document.createElement('span');
+              mk.className = 'marker'; mk.textContent = '+';
+              sm.appendChild(mk);
+              const ans = document.createElement('p');
+              ans.className = 'answer'; ans.textContent = a || '';
+              d.appendChild(sm); d.appendChild(ans);
+              list.appendChild(d);
+            });
+          }
+        }
+
+```
+
+   Courses without a `faq:` line keep the existing default FAQ unchanged.
+
+2. **`courses/data/zw-cards-2026.md`** — replace with the branch version (it only adds the
+   `faq:` line and shortens `signupLabel` to 「立即报名」). First check the local file is
+   still the round-1 version (sha256 starts `cf41cb1d433f`); if it differs, stop and ask.
+
+```bash
+R=https://raw.githubusercontent.com/xiziwansui/xiantang-site/claude/fervent-lovelace-4y023t
+sha256sum courses/data/zw-cards-2026.md | cut -c1-12     # expect cf41cb1d433f
+curl -fsSL -o courses/data/zw-cards-2026.md "$R/courses/data/zw-cards-2026.md"
+sha256sum courses/data/zw-cards-2026.md | cut -c1-12     # expect d0cd5567e9e0
+```
+
+Check locally (`python3 -m http.server 8000`):
+- `/courses/course.html?slug=zw-cards-2026` → 常见问题 shows 6 questions starting
+  「报名后多久收到确认？」; button reads 「立即报名」 on one line on a phone.
+- `/courses/course.html?slug=anyan-live` → still the original 4 questions.
+
+Then publish these 2 files (ask the user first) and re-check both URLs on
+https://www.xiantang.life.
+
+The new 退款 answer reuses the site's existing offline rule (「线下课程开课前 14 天前可全退」)
+— confirm with the user that this applies to this class.
