@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-81QNQHVXSJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-81QNQHVXSJ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>课程报名 — 禧安堂</title>
+  <meta name="description" content="紫微牌卡两日速成班 · 线上报名并付款。" />
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/site.css?v=202608101630" />
+  <style>
+    #signup { padding: 120px 0 72px; }
+    .su-wrap { max-width: 620px; margin: 0 auto; }
+    .su-eyebrow { font-size: 12px; letter-spacing: .32em; text-transform: uppercase; color: var(--terracotta); font-weight: 500; margin-bottom: 12px; }
+    .su-wrap h1 { font-family: 'Noto Serif SC', serif; font-weight: 900; color: var(--plum); font-size: clamp(30px, 5.5vw, 44px); line-height: 1.2; margin-bottom: 14px; }
+    .su-meta { color: var(--gray-2); font-size: 15px; line-height: 1.9; margin-bottom: 8px; }
+    .su-meta a { color: var(--terracotta); }
+    .su-banner { margin: 20px 0 0; padding: 12px 16px; border-radius: 10px; font-size: 14px; line-height: 1.7; background: rgba(201,154,63,.14); color: var(--plum); }
+    .su-banner.err { background: rgba(194,96,63,.12); color: #8a3a20; }
+    form.su-form { margin-top: 32px; display: flex; flex-direction: column; gap: 22px; }
+    .su-legend { font-family: 'Noto Serif SC', serif; font-weight: 700; color: var(--plum); font-size: 18px; margin-bottom: 12px; }
+    .su-tickets { display: flex; flex-direction: column; gap: 10px; border: 0; padding: 0; margin: 0; }
+    .su-ticket { display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; border: 1px solid var(--gray-4); border-radius: 12px; background: #fff; cursor: pointer; transition: border-color .2s, box-shadow .2s; }
+    .su-ticket:hover { border-color: var(--terracotta); }
+    .su-ticket input { margin-top: 5px; accent-color: var(--terracotta); width: 18px; height: 18px; flex: none; }
+    .su-ticket.on { border-color: var(--terracotta); box-shadow: 0 0 0 3px rgba(194,96,63,.12); }
+    .su-t-main { flex: 1; }
+    .su-t-name { display: block; font-weight: 500; color: var(--plum); font-size: 16px; }
+    .su-t-sub { display: block; font-size: 13px; color: var(--gray-3); line-height: 1.6; margin-top: 2px; }
+    .su-t-price { text-align: right; white-space: nowrap; }
+    .su-t-price b { font-family: 'Noto Serif SC', serif; font-size: 20px; white-space: nowrap; color: var(--terracotta); }
+    .su-t-price s { display: block; font-size: 12px; color: var(--gray-3); }
+    .su-field { display: flex; flex-direction: column; gap: 6px; }
+    .su-field label { font-size: 14px; color: var(--plum); font-weight: 500; }
+    .su-field label small { color: var(--gray-3); font-weight: 400; }
+    .su-field input, .su-field textarea { font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid var(--gray-4); border-radius: 10px; background: #fff; color: var(--gray-1); width: 100%; box-sizing: border-box; }
+    .su-field input:focus, .su-field textarea:focus { outline: none; border-color: var(--terracotta); box-shadow: 0 0 0 3px rgba(194,96,63,.12); }
+    .su-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .su-row { grid-template-columns: 1fr; } #signup { padding: 96px 0 56px; } }
+    .su-total { display: flex; justify-content: space-between; align-items: baseline; padding: 18px 0 0; border-top: 1px solid var(--gray-4); color: var(--plum); }
+    .su-total b { font-family: 'Noto Serif SC', serif; font-size: 26px; color: var(--terracotta); }
+    .su-pay { font: inherit; font-size: 16px; letter-spacing: .06em; border: 0; border-radius: 999px; padding: 15px 28px; background: var(--terracotta); color: #fff; cursor: pointer; transition: transform .2s, box-shadow .2s, opacity .2s; }
+    .su-pay:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(196,110,74,.30); }
+    .su-pay[disabled] { opacity: .6; cursor: wait; transform: none; box-shadow: none; }
+    .su-fine { font-size: 13px; color: var(--gray-3); line-height: 1.7; text-align: center; }
+    .su-fine a { color: var(--terracotta); text-decoration: none; }
+    [hidden] { display: none !important; }
+    /* success */
+    .su-done { text-align: center; padding-top: 12px; }
+    .su-badge { width: 84px; height: 84px; margin: 0 auto 26px; border-radius: 50%; background: var(--terracotta); display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 34px rgba(196,110,74,.28); }
+    .su-badge svg { width: 42px; height: 42px; color: #fff; }
+    .su-done .su-lead { font-size: 17px; color: var(--gray-2); line-height: 1.75; max-width: 480px; margin: 0 auto; }
+    .su-paid { display: inline-block; margin: 18px auto 4px; padding: 9px 18px; border-radius: 999px; background: rgba(196,110,74,.10); border: 1px solid rgba(196,110,74,.28); color: var(--plum); font-size: 15px; font-weight: 500; }
+    .su-actions { margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .su-btn { display: inline-flex; padding: 13px 26px; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none; }
+    .su-btn.primary { background: var(--terracotta); color: #fff; }
+    .su-btn.ghost { color: var(--plum); border: 1px solid var(--gray-4); }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" aria-label="主导航">
+    <a href="index.html" class="nav-logo"><img src="assets/logo-recolored.png" alt="禧安堂" style="height:44px;width:auto;display:block;" /></a>
+    <ul class="nav-links">
+      <li><a href="https://mystar.xiantang.life">星星看</a></li>
+      <li><a href="index.html" data-zh="首页" data-en="Home">首页</a></li>
+      <li><a href="about.html" data-zh="关于" data-en="About">关于</a></li>
+      <li><a href="services.html" data-zh="服务" data-en="Services">服务</a></li>
+      <li><a href="courses.html" data-zh="课程" data-en="Courses">课程</a></li>
+      <li><a href="journal.html" data-zh="文章" data-en="Journal">文章</a></li>
+      <li><a href="contact.html" data-zh="联系" data-en="Contact">联系</a></li>
+      <li class="nav-lang-mobile"><a class="js-lang-switch" href="#">English</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="菜单" aria-expanded="false" type="button"><svg class="nav-toggle-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line class="bar bar-1" x1="4" y1="7" x2="20" y2="7"/><line class="bar bar-2" x1="4" y1="12" x2="20" y2="12"/><line class="bar bar-3" x1="4" y1="17" x2="20" y2="17"/></svg></button>
+    <div class="nav-right">
+      <a class="nav-lang js-lang-switch" href="#">EN</a>
+      <a href="contact.html#book" class="nav-cta" data-zh="预约咨询" data-en="Book a reading">预约咨询</a>
+    </div>
+  </nav>
+
+  <main id="signup">
+    <div class="container">
+      <div class="su-wrap">
+
+        <!-- ── Form ── -->
+        <section id="su-form-view">
+          <p class="su-eyebrow" data-zh="课程报名 · 线上付款" data-en="Registration · Pay online">课程报名 · 线上付款</p>
+          <h1 id="su-title">紫微牌卡两日速成班</h1>
+          <p class="su-meta" id="su-meta"></p>
+          <p class="su-banner" id="su-canceled" hidden data-zh="付款已取消，没有扣款。你可以重新提交。" data-en="Payment was cancelled — you have not been charged. You can try again below.">付款已取消，没有扣款。你可以重新提交。</p>
+          <p class="su-banner err" id="su-closed" hidden></p>
+
+          <form class="su-form" id="su-form" novalidate>
+            <div>
+              <p class="su-legend" data-zh="选择票种" data-en="Choose your ticket">选择票种</p>
+              <fieldset class="su-tickets" id="su-tickets"></fieldset>
+            </div>
+
+            <div class="su-row">
+              <div class="su-field">
+                <label for="f-name" data-zh="姓名 / 称呼" data-en="Name">姓名 / 称呼</label>
+                <input id="f-name" name="name" autocomplete="name" required maxlength="60" />
+              </div>
+              <div class="su-field">
+                <label for="f-phone" data-zh="手机 / WhatsApp" data-en="Mobile / WhatsApp">手机 / WhatsApp</label>
+                <input id="f-phone" name="phone" type="tel" autocomplete="tel" required maxlength="30" placeholder="+65 …" />
+              </div>
+            </div>
+            <div class="su-field">
+              <label for="f-email"><span data-zh="邮箱" data-en="Email">邮箱</span> <small data-zh="（报名确认信会发到这里）" data-en="(your confirmation goes here)">（报名确认信会发到这里）</small></label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="120" />
+            </div>
+
+            <div class="su-row" id="su-partner" hidden>
+              <div class="su-field">
+                <label for="f-pname" data-zh="同行者姓名" data-en="Your companion's name">同行者姓名</label>
+                <input id="f-pname" name="partnerName" maxlength="60" />
+              </div>
+              <div class="su-field">
+                <label for="f-pemail"><span data-zh="同行者邮箱" data-en="Companion's email">同行者邮箱</span> <small data-zh="（选填，会一起收到确认信）" data-en="(optional — gets a copy)">（选填，会一起收到确认信）</small></label>
+                <input id="f-pemail" name="partnerEmail" type="email" maxlength="120" />
+              </div>
+            </div>
+
+            <div class="su-field" id="su-returning" hidden>
+              <label for="f-rnote" data-zh="去年上的是哪一期 / 什么时候？" data-en="Which class did you attend last year, and when?">去年上的是哪一期 / 什么时候？</label>
+              <input id="f-rnote" name="returningNote" maxlength="200" />
+            </div>
+
+            <div class="su-total"><span data-zh="合计" data-en="Total">合计</span><b id="su-total">—</b></div>
+            <p class="su-banner err" id="su-error" hidden></p>
+            <button class="su-pay" id="su-pay" type="submit" data-zh="前往付款" data-en="Continue to payment">前往付款</button>
+            <p class="su-fine"><span data-zh="由 Stripe 安全收款，支持信用卡 / Apple Pay / Google Pay。付款后会收到报名确认邮件。" data-en="Secure payment by Stripe — card, Apple Pay, Google Pay. You'll receive a confirmation email once paid.">由 Stripe 安全收款，支持信用卡 / Apple Pay / Google Pay。付款后会收到报名确认邮件。</span><br /><span data-zh="报名问题请邮件" data-en="Questions about registration:">报名问题请邮件</span> <a href="mailto:info@xiantang.life">info@xiantang.life</a></p>
+          </form>
+        </section>
+
+        <!-- ── Paid ── -->
+        <section id="su-done-view" class="su-done" hidden>
+          <div class="su-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <p class="su-eyebrow" data-zh="报名成功" data-en="You're registered">报名成功</p>
+          <h1 data-zh="课堂上见！" data-en="See you in class!">课堂上见！</h1>
+          <p class="su-lead" data-zh="付款成功，名额已为你保留。报名确认邮件已发到你的邮箱（若没看到，请查看垃圾邮件）。开课前几天我们会再发上课地址与注意事项。" data-en="Payment received and your seat is reserved. A confirmation email is on its way (check your spam folder if you don't see it). We'll send the venue address and what to bring a few days before class.">付款成功，名额已为你保留。报名确认邮件已发到你的邮箱（若没看到，请查看垃圾邮件）。开课前几天我们会再发上课地址与注意事项。</p>
+          <p class="su-paid" id="su-paid" hidden></p>
+          <div class="su-actions">
+            <a href="index.html" class="su-btn primary" data-zh="返回首页" data-en="Back to home">返回首页</a>
+            <a href="#" id="su-course-link" class="su-btn ghost" data-zh="查看课程详情" data-en="Course details">查看课程详情</a>
+          </div>
+          <p class="su-fine" style="margin-top:28px;"><span data-zh="Stripe 收据已另行发送。如有疑问，邮件" data-en="Your Stripe receipt is sent separately. Questions?">Stripe 收据已另行发送。如有疑问，邮件</span> <a href="mailto:info@xiantang.life">info@xiantang.life</a></p>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="assets/logo-recolored.png" alt="禧安堂" style="height:32px;width:auto;display:block;margin-bottom:12px;opacity:0.85;filter:brightness(0) invert(1) sepia(1) saturate(0.4) brightness(1.2);" />
+          <p data-zh="安妍老师的命理之家。用紫微斗数、八字、风水，陪你看清当下，安顿未来。" data-en="安妍老师 (An Yan)'s home for Zi Wei Dou Shu, BaZi and Feng Shui.">安妍老师的命理之家。用紫微斗数、八字、风水，陪你看清当下，安顿未来。</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 禧安堂 Xiantang. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/site.js?v=202608101630"></script>
+  <script>
+  (function () {
+    // ── Workshop catalog (DISPLAY ONLY — the server prices every ticket itself;
+    //    keep in sync with lib/ziwei/workshops.ts in the ziwei / mystar repo). ──
+    var API = 'https://mystar.xiantang.life/api/workshop/checkout';
+    var WORKSHOPS = {
+      'zw-cards-2026': {
+        title: { zh: '紫微牌卡两日速成班', en: 'Zi Wei Cards · 2-Day Intensive' },
+        meta: {
+          zh: '安妍老师主讲 · 12月6日 & 13日（周日）10:00am – 5:00pm · 新加坡线下 · 限 15 人',
+          en: 'With 安妍老师 (An Yan) · Sun 6 & 13 Dec 2026, 10:00am – 5:00pm · Singapore, in person · 15 seats'
+        },
+        page: 'courses/course.html?slug=zw-cards-2026',
+        earlyBirdUntil: '2026-11-30T23:59:59+08:00',
+        closes: '2026-12-06T10:00:00+08:00',
+        price: { early: 588, regular: 880, pairEarly: 538, returning: 50 }
+      }
+    };
+
+    var q = new URLSearchParams(location.search);
+    var lang = q.get('lang') === 'en' ? 'en' : 'zh';
+    var slug = q.get('slug') || 'zw-cards-2026';
+    var w = WORKSHOPS[slug] || WORKSHOPS['zw-cards-2026'];
+    var now = Date.now();
+    var early = now <= Date.parse(w.earlyBirdUntil);
+    var closed = now >= Date.parse(w.closes);
+    function tr(o) { return o[lang] || o.zh; }
+    function $(id) { return document.getElementById(id); }
+
+    // ── language ──
+    document.documentElement.lang = lang === 'en' ? 'en' : 'zh-CN';
+    if (lang === 'en') {
+      document.querySelectorAll('[data-en]').forEach(function (el) { el.textContent = el.getAttribute('data-en'); });
+    }
+    document.querySelectorAll('.js-lang-switch').forEach(function (a) {
+      var p = new URLSearchParams(location.search);
+      if (lang === 'en') p.delete('lang'); else p.set('lang', 'en');
+      a.href = '?' + p.toString();
+      a.textContent = lang === 'en' ? (a.closest('.nav-lang-mobile') ? '中文' : '中') : (a.closest('.nav-lang-mobile') ? 'English' : 'EN');
+    });
+    document.title = (lang === 'en' ? 'Register — ' : '报名 — ') + tr(w.title) + (lang === 'en' ? ' | Xiantang' : ' — 禧安堂');
+    $('su-title').textContent = tr(w.title);
+    $('su-meta').innerHTML = '';
+    $('su-meta').appendChild(document.createTextNode(tr(w.meta) + ' · '));
+    var more = document.createElement('a');
+    more.href = w.page; more.textContent = lang === 'en' ? 'Course details' : '课程详情';
+    $('su-meta').appendChild(more);
+    $('su-course-link').href = w.page;
+
+    // ── paid return from Stripe ──
+    if (q.get('paid') === '1') {
+      $('su-form-view').hidden = true;
+      $('su-done-view').hidden = false;
+      var amt = q.get('amt'), sid = q.get('sid');
+      if (amt) { $('su-paid').hidden = false; $('su-paid').textContent = (lang === 'en' ? 'Paid · S$' : '已支付 · S$') + Number(amt).toLocaleString('en-SG') + ' · ' + tr(w.title); }
+      if (typeof gtag === 'function') {
+        var ev = { form_id: 'workshop', service: tr(w.title) };
+        if (sid) ev.transaction_id = sid;
+        if (amt && !isNaN(parseFloat(amt))) { ev.value = parseFloat(amt); ev.currency = 'SGD'; }
+        gtag('event', 'purchase', ev);
+      }
+      return;
+    }
+    if (q.get('canceled') === '1') $('su-canceled').hidden = false;
+
+    if (closed) {
+      $('su-closed').hidden = false;
+      $('su-closed').textContent = lang === 'en' ? 'Registration for this class has closed.' : '本期报名已截止。';
+      $('su-form').hidden = true;
+      return;
+    }
+
+    // ── tickets ──
+    var P = w.price;
+    var tickets = [
+      early
+        ? { id: 'standard', name: { zh: '早鸟价', en: 'Early bird' }, sub: { zh: '11月30日前报名', en: 'Register by 30 Nov' }, unit: P.early, seats: 1, was: P.regular }
+        : { id: 'standard', name: { zh: '标准票', en: 'Standard' }, sub: { zh: '一人', en: 'One person' }, unit: P.regular, seats: 1 }
+    ];
+    if (early) tickets.push({ id: 'pair', name: { zh: '两人同行', en: 'Two together' }, sub: { zh: '早鸟期内 · 每人 S$' + P.pairEarly + '，一次付两人', en: 'Early bird · S$' + P.pairEarly + ' each, pay for both' }, unit: P.pairEarly, seats: 2 });
+    tickets.push({ id: 'returning', name: { zh: '去年旧生', en: 'Returning student' }, sub: { zh: '行政及资料费 · 上过去年牌卡课', en: 'Admin & materials · attended last year' }, unit: P.returning, seats: 1 });
+
+    var box = $('su-tickets');
+    tickets.forEach(function (t, i) {
+      var lab = document.createElement('label');
+      lab.className = 'su-ticket';
+      lab.innerHTML =
+        '<input type="radio" name="ticket" value="' + t.id + '"' + (i === 0 ? ' checked' : '') + ' />' +
+        '<span class="su-t-main"><span class="su-t-name"></span><span class="su-t-sub"></span></span>' +
+        '<span class="su-t-price"><b></b>' + (t.was ? '<s></s>' : '') + '</span>';
+      lab.querySelector('.su-t-name').textContent = tr(t.name);
+      lab.querySelector('.su-t-sub').textContent = tr(t.sub);
+      lab.querySelector('b').textContent = 'S$' + t.unit + (t.seats > 1 ? (lang === 'en' ? ' ×2' : ' ×2 人') : '');
+      if (t.was) lab.querySelector('s').textContent = 'S$' + t.was;
+      box.appendChild(lab);
+    });
+
+    var preset = q.get('ticket');
+    if (preset) { var r = box.querySelector('input[value="' + preset + '"]'); if (r) r.checked = true; }
+
+    function current() {
+      var v = box.querySelector('input:checked').value;
+      for (var i = 0; i < tickets.length; i++) if (tickets[i].id === v) return tickets[i];
+    }
+    function sync() {
+      var t = current();
+      box.querySelectorAll('.su-ticket').forEach(function (l) { l.classList.toggle('on', l.querySelector('input').checked); });
+      $('su-partner').hidden = t.id !== 'pair';
+      $('su-returning').hidden = t.id !== 'returning';
+      $('f-pname').required = t.id === 'pair';
+      $('f-rnote').required = t.id === 'returning';
+      $('su-total').textContent = 'S$' + (t.unit * t.seats).toLocaleString('en-SG');
+    }
+    box.addEventListener('change', sync);
+    sync();
+
+    // ── submit → Stripe Checkout ──
+    var ERR = {
+      sold_out: { zh: '抱歉，名额已满。可以邮件 info@xiantang.life 登记候补。', en: 'Sorry, this class is full. Email info@xiantang.life to join the waitlist.' },
+      closed: { zh: '本期报名已截止。', en: 'Registration has closed.' },
+      pair_after_early_bird: { zh: '两人同行优惠已随早鸟结束，请刷新页面重新选择。', en: 'The two-together price ended with early bird — please refresh and choose again.' },
+      rate_limited: { zh: '提交太频繁了，请稍后再试。', en: 'Too many attempts — please wait a few minutes.' },
+      invalid_input: { zh: '请检查填写的资料（邮箱格式、电话）。', en: 'Please check your details (email, phone).' },
+      fallback: { zh: '暂时无法前往付款，请稍后再试，或邮件 info@xiantang.life。', en: "Couldn't start payment. Please try again, or email info@xiantang.life." }
+    };
+    function showErr(code) { $('su-error').hidden = false; $('su-error').textContent = tr(ERR[code] || ERR.fallback); }
+
+    $('su-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      $('su-error').hidden = true;
+      var f = e.target;
+      if (!f.reportValidity()) return;
+      var t = current();
+      var body = {
+        slug: slug, ticket: t.id, lang: lang,
+        name: $('f-name').value.trim(), email: $('f-email').value.trim(), phone: $('f-phone').value.trim(),
+        partnerName: t.id === 'pair' ? $('f-pname').value.trim() : null,
+        partnerEmail: t.id === 'pair' ? $('f-pemail').value.trim() : null,
+        returningNote: t.id === 'returning' ? $('f-rnote').value.trim() : null
+      };
+      var btn = $('su-pay');
+      btn.disabled = true;
+      btn.textContent = lang === 'en' ? 'Opening secure payment…' : '正在前往安全付款…';
+      if (typeof gtag === 'function') gtag('event', 'begin_checkout', { form_id: 'workshop', service: tr(w.title), value: t.unit * t.seats, currency: 'SGD' });
+      fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function (d) {
+          if (d && d.url) { location.href = d.url; return; }
+          showErr(d && d.error);
+          btn.disabled = false; btn.textContent = lang === 'en' ? 'Continue to payment' : '前往付款';
+        })
+        .catch(function () {
+          showErr('fallback');
+          btn.disabled = false; btn.textContent = lang === 'en' ? 'Continue to payment' : '前往付款';
+        });
+    });
+  })();
+  </script>
+</body>
+</html>

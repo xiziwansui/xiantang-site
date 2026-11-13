@@ -13,8 +13,8 @@ priceNow: SGD 588
 priceWas: SGD 880
 dealLabel: 早鸟价 · 11月30日截止 · 限 15 人
 dealUntil: 11月30日
-signupLabel: 立即报名
-signupUrl: https://wa.me/6583188066?text=%E5%AE%89%E5%A6%8D%E8%80%81%E5%B8%88%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E6%8A%A5%E5%90%8D%E3%80%8C%E7%B4%AB%E5%BE%AE%E7%89%8C%E5%8D%A1%E4%B8%A4%E6%97%A5%E9%80%9F%E6%88%90%E7%8F%AD%E3%80%8D%EF%BC%8812%E6%9C%886%E6%97%A5%20%26%2013%E6%97%A5%EF%BC%89%E3%80%82
+signupLabel: 立即报名 · 线上付款
+signupUrl: /workshop-signup.html?slug=zw-cards-2026
 summary: 两个周日，从零基础到能独立为自己和朋友解牌。不用排盘，也能读懂紫微。2026 年末限定 · 新加坡小班实体课，限 15 人。
 perks: 一对一牌卡解读 :: 安妍老师亲自为你解读一次，价值 S$300。 || 紫微牌卡一副 :: 课堂即用，带回家继续练，价值 S$30。 || 养牌风水位指导 :: 牌卡放哪里、怎么养，价值 S$300。 || 课程复习资料 :: 两天重点整理成册，价值 S$128。 || 一年内免费重听 :: 一年内随时回来再上一次，价值 S$880。 || 两人同行优惠 :: 早鸟期内两人一起报名，每人 S$538。
 coverHeadline: 紫微牌卡

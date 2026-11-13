@@ -46,7 +46,7 @@
         earlyNote: { zh: '两人同行每人 S$538 · 去年旧生 S$50', en: 'Two together: S$538 each · Returning students: S$50' },
         note: { zh: '去年旧生 S$50（行政及资料费）', en: 'Returning students: S$50 (admin & materials)' },
         bonus: { zh: '含一对一牌卡解读、牌卡一副、一年内免费重听等福利，总价值 S$1,638', en: 'Includes a 1-on-1 card reading, a card deck, free re-attendance for a year and more — worth S$1,638' },
-        signupUrl: 'https://wa.me/6583188066?text=%E5%AE%89%E5%A6%8D%E8%80%81%E5%B8%88%E4%BD%A0%E5%A5%BD%EF%BC%8C%E6%88%91%E6%83%B3%E6%8A%A5%E5%90%8D%E3%80%8C%E7%B4%AB%E5%BE%AE%E7%89%8C%E5%8D%A1%E4%B8%A4%E6%97%A5%E9%80%9F%E6%88%90%E7%8F%AD%E3%80%8D%EF%BC%8812%E6%9C%886%E6%97%A5%20%26%2013%E6%97%A5%EF%BC%89%E3%80%82',
+        signupUrl: { zh: '/workshop-signup.html?slug=zw-cards-2026', en: '/workshop-signup.html?slug=zw-cards-2026&lang=en' },
         detailsUrl: '/courses/course.html?slug=zw-cards-2026'
       }
     ],
@@ -172,13 +172,14 @@
     var items = CONFIG.events.map(function (ev, i) {
       var meta = [tr(ev.date), tr(ev.time), tr(ev.place), tr(ev.seats)].filter(Boolean)
         .map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('');
-      var ext = /^https?:/.test(ev.signupUrl);
+      var signup = tr(ev.signupUrl);
+      var ext = /^https?:/.test(signup);
       return '<li class="xt-ev-item">' +
         '<h3 class="xt-ev-t">' + esc(tr(ev.title)) + '</h3>' +
         (meta ? '<p class="xt-ev-meta">' + meta + '</p>' : '') +
         priceHtml(ev) +
         (tr(ev.bonus) ? '<p class="xt-ev-bonus">' + esc(tr(ev.bonus)) + '</p>' : '') +
-        '<a class="xt-ev-cta" data-i="' + i + '" href="' + esc(ev.signupUrl) + '"' +
+        '<a class="xt-ev-cta" data-i="' + i + '" href="' + esc(signup) + '"' +
         (ext ? ' target="_blank" rel="noopener"' : '') + '>' + esc(tr(T.signup)) + ' →</a>' +
         (ev.detailsUrl ? '<a class="xt-ev-more" href="' + esc(ev.detailsUrl) + '">' + esc(tr(T.details)) + '</a>' : '') +
         '</li>';
