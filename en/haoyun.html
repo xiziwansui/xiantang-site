@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-81QNQHVXSJ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-81QNQHVXSJ');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fortune Lab — Xiantang</title>
+  <meta name="description" content="Xiantang's Fortune Lab: talismans, candles and the Prosperity Pouch — every good-fortune item on one page." />
+  <link rel="alternate" hreflang="zh-Hans" href="https://xiantang.life/haoyun.html" />
+  <link rel="alternate" hreflang="en" href="https://xiantang.life/en/haoyun.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/site.css?v=202608101630" />
+  <style>
+    #shop { padding: 56px 0 160px; }
+    .shop-note { font-size: 14px; color: var(--gray-3); line-height: 1.8; max-width: 640px; margin-bottom: 40px; }
+    .shop-cat { margin-top: 48px; }
+    .shop-cat h2 { font-size: clamp(26px, 3vw, 36px); font-weight: 900; color: var(--plum); margin-bottom: 4px; }
+    .shop-cat .cat-en { font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--honey); margin-bottom: 20px; }
+    .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    @media (max-width: 520px) { .shop-grid { grid-template-columns: 1fr 1fr; gap: 12px; } }
+    .card { background: #fff; border: 1px solid var(--gray-4); border-radius: var(--radius-card); overflow: hidden; display: flex; flex-direction: column; }
+    .card-visual { aspect-ratio: 4/5; background: var(--plum); position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .card-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-visual::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 25%, rgba(194,96,63,0.35) 0%, transparent 60%), radial-gradient(circle at 20% 85%, rgba(201,154,63,0.22) 0%, transparent 55%); }
+    .card-visual .glyph { position: relative; z-index: 1; font-family: 'Noto Serif SC', serif; font-weight: 900; color: var(--cream); writing-mode: vertical-rl; letter-spacing: 0.2em; font-size: 22px; padding: 18px 10px; border: 1px solid rgba(201,154,63,0.6); border-radius: 4px; background: rgba(194,96,63,0.18); }
+    .card-visual .soon { position: absolute; top: 12px; left: 12px; z-index: 2; font-size: 11px; letter-spacing: 0.14em; color: var(--cream); background: rgba(245,239,230,0.14); padding: 4px 10px; border-radius: 999px; }
+    .card-body { padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .card-body h3 { font-family: 'Noto Serif SC', serif; font-size: 17px; font-weight: 700; color: var(--plum); line-height: 1.35; }
+    .card-body .use { font-size: 13px; color: var(--gray-3); line-height: 1.6; }
+    .card-body .price { font-family: 'Noto Serif SC', serif; font-size: 18px; font-weight: 700; color: var(--terracotta); margin-top: auto; padding-top: 8px; }
+    .card-body .price.muted { color: var(--gray-3); font-size: 14px; font-weight: 500; }
+    .qty { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .qty button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--gray-4); background: var(--cream); color: var(--plum); font-size: 18px; cursor: pointer; line-height: 1; }
+    .qty button:disabled { opacity: 0.35; cursor: default; }
+    .qty .n { min-width: 22px; text-align: center; font-weight: 500; color: var(--plum); }
+    .card .link-cta { margin-top: 8px; font-size: 13px; color: var(--terracotta); text-decoration: none; }
+    #cart-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; background: var(--plum); color: var(--cream); padding: 14px 24px calc(14px + env(safe-area-inset-bottom)); display: none; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 -8px 30px rgba(0,0,0,0.18); }
+    #cart-bar.show { display: flex; }
+    #cart-bar .sum { font-size: 15px; }
+    #cart-bar .sum b { font-family: 'Noto Serif SC', serif; font-size: 18px; color: var(--honey); margin-left: 6px; }
+    #checkout { display: none; margin-top: 56px; padding: 32px; background: #fff; border: 1px solid var(--gray-4); border-radius: var(--radius-card); max-width: 640px; }
+    #checkout.show { display: block; }
+    #checkout h2 { font-size: 26px; font-weight: 900; color: var(--plum); margin-bottom: 16px; }
+    #checkout ul { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 6px; font-size: 14px; color: var(--gray-2); }
+    #checkout ul li { display: flex; justify-content: space-between; gap: 12px; }
+    #checkout label { display: block; font-size: 13px; color: var(--gray-2); margin: 14px 0 6px; }
+    #checkout input, #checkout textarea { width: 100%; box-sizing: border-box; padding: 12px 14px; border: 1px solid var(--gray-4); border-radius: 8px; font: inherit; font-size: 15px; background: var(--cream); color: var(--gray-1); }
+    #checkout textarea { min-height: 84px; resize: vertical; }
+    #checkout .fine { font-size: 12px; color: var(--gray-3); line-height: 1.7; margin-top: 12px; }
+    #checkout .err { color: var(--terracotta); font-size: 13px; margin-top: 10px; min-height: 1em; }
+    .banner { margin: 0 0 32px; padding: 18px 22px; border-radius: 12px; font-size: 15px; line-height: 1.7; }
+    .banner.ok { background: var(--sage-light); color: var(--plum); }
+    .banner.warn { background: var(--terracotta-light); color: var(--plum); }
+  </style>
+</head>
+<body>
+  <nav id="site-nav" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo"><img src="../assets/logo-recolored.png" alt="Xiantang" style="height:44px;width:auto;display:block;" /></a>
+    <ul class="nav-links">
+      <li><a href="https://mystar.xiantang.life">MyStar</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="haoyun.html" class="active">Fortune Lab</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li class="nav-lang-mobile"><a href="../haoyun.html">中文</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false" type="button"><svg class="nav-toggle-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="nav-right">
+      <a class="nav-lang" href="../haoyun.html">中文</a>
+      <a href="contact.html#book" class="nav-cta">Book a Consultation</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-head">
+      <div class="page-head-inner">
+        <p class="page-head-eyebrow">Xiantang · Fortune Lab</p>
+        <h1>Good-fortune items,<br /><em>all on one page</em></h1>
+        <p class="lede">Xiantang's Fortune Lab: talismans, candles and the Prosperity Pouch. Pick your quantities, check out once, and we'll post it to you.</p>
+      </div>
+    </section>
+
+    <section id="shop">
+      <div class="container">
+        <div id="banner"></div>
+        <p class="shop-note">A talisman's role is to support and to remind — it doesn't replace the specific advice of a consultation. Not sure which one suits you? <a href="contact.html#book" style="color:var(--terracotta)">Book a Life Reading with Master An Yan</a>.</p>
+        <div id="catalog"></div>
+
+        <form id="checkout" novalidate>
+          <h2>Checkout</h2>
+          <ul id="checkout-lines"></ul>
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" maxlength="60" required autocomplete="name" />
+          <label for="f-email">Email (your order confirmation goes here)</label>
+          <input id="f-email" name="email" type="email" maxlength="120" required autocomplete="email" />
+          <label for="f-note">Note (optional)</label>
+          <textarea id="f-note" name="note" maxlength="400" placeholder="e.g. a name to write on the talisman, who it's a gift for, or anything Master An Yan should know"></textarea>
+          <p class="fine">Next, enter your shipping address and phone on Stripe's secure payment page. We currently ship to Singapore and Malaysia; for anywhere else, please <a href="contact.html" style="color:var(--terracotta)">contact us</a> first.</p>
+          <button type="submit" class="btn-primary" id="pay-btn" style="margin-top:18px">Continue to payment</button>
+          <p class="err" id="pay-err"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div id="cart-bar" role="region" aria-label="Cart">
+    <span class="sum" id="cart-sum"></span>
+    <button class="btn-primary" id="cart-go" type="button" style="padding:11px 22px">Checkout</button>
+  </div>
+
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="../assets/logo-recolored.png" alt="Xiantang" style="height:32px;width:auto;display:block;margin-bottom:12px;opacity:0.85;filter:brightness(0) invert(1) sepia(1) saturate(0.4) brightness(1.2);" />
+          <p>Master An Yan's home of Chinese metaphysics. With Zi Wei Dou Shu, BaZi, and Feng Shui, she helps you see the present clearly and settle your future.</p>
+        </div>
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="services.html#divination">Life Reading</a></li><li><a href="services.html#naming">Naming</a></li><li><a href="services.html#fengshui">Feng Shui</a></li><li><a href="haoyun.html">Fortune Lab</a></li></ul></div>
+        <div class="footer-col"><h5>Courses</h5><ul><li><a href="courses.html#dageng">Master Da Geng's Courses</a></li><li><a href="courses.html#anyan">Master An Yan's Courses</a></li></ul></div>
+        <div class="footer-col"><h5>More</h5><ul><li><a href="about.html">About Master An Yan</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Xiantang. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Display copy of lib/ziwei/shop.ts SHOP_ITEMS — the server prices the cart from its own
+    // copy, so a stale price here can never be charged. Keep the SKUs identical.
+    // priceSgd null = 即将推出; withService = shown, booked with the service instead.
+    // image: optional path under assets/ (AI-generated stand-ins are fine).
+    var ITEMS = [
+      { sku: 'fu_pingan', cat: 'fu', name: 'Full-Radiance Peace Talisman', use: 'Safety at home and on the move', price: 120 },
+      { sku: 'fu_zhaocai', cat: 'fu', name: 'Direct-Wealth Talisman', use: 'Steady income from work', price: 120 },
+      { sku: 'fu_xiaoren', cat: 'fu', name: 'Anti-Gossip & Ill-Wisher Talisman', use: 'Workplace friction and gossip', price: 120 },
+      { sku: 'fu_mengjing', cat: 'fu', name: 'Nightmare-Calming Talisman', use: 'Restless sleep and troubled dreams', price: 120 },
+      { sku: 'fu_yuanxing', cat: 'fu', name: 'Travel Protection Talisman', use: 'Long trips and travel abroad', price: 120 },
+      { sku: 'fu_renyuan', cat: 'fu', name: 'Good-Relations Talisman', use: 'Getting on with people; helpful connections', price: 120 },
+      { sku: 'fu_quling', cat: 'fu', name: 'Spirit-Dispelling Talisman', use: 'When a space feels unsettled', price: 120 },
+      { sku: 'fu_taohua', cat: 'fu', name: 'Peach-Blossom Fairy Talisman', use: 'Love and romance', price: 120 },
+      { sku: 'fu_zhenzhai', cat: 'fu', name: 'Home-Guardian Talisman', use: 'Used with a Feng Shui consultation', price: 380, priceLabel: 'From S$380', withService: { label: 'Arranged with a Feng Shui visit →', href: 'contact.html#book' } },
+      { sku: 'candle_1', cat: 'candle', name: 'Grounding Candle', use: 'Coming soon', price: null },
+      { sku: 'candle_2', cat: 'candle', name: 'Harmony Candle', use: 'Coming soon', price: null },
+      { sku: 'pouch_juqian', cat: 'pouch', name: 'Prosperity Pouch', use: 'Coming soon', price: null }
+    ];
+    var CATS = [
+      { key: 'fu', name: 'Talismans', en: '符箓' },
+      { key: 'candle', name: 'Candles', en: '开运蜡烛' },
+      { key: 'pouch', name: 'Prosperity Pouch', en: '聚财福袋' }
+    ];
+    var MAX_QTY = 10;
+    var CHECKOUT_URL = 'https://mystar.xiantang.life/api/shop/checkout';
+    var cart = {};
+
+    function el(tag, attrs, kids) {
+      var n = document.createElement(tag);
+      for (var k in (attrs || {})) {
+        if (k === 'text') n.textContent = attrs[k];
+        else if (k === 'class') n.className = attrs[k];
+        else n.setAttribute(k, attrs[k]);
+      }
+      (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+      return n;
+    }
+    function money(n) { return 'S$' + n.toLocaleString('en-SG'); }
+    // The card art stays in Chinese — it's the talisman itself.
+    var GLYPH = { fu_pingan: '全光平安符', fu_zhaocai: '正财招财符', fu_xiaoren: '防小人口舌符', fu_mengjing: '镇嚏梦符', fu_yuanxing: '远行保身符', fu_renyuan: '人缘符', fu_quling: '驱灵五电符', fu_taohua: '桃花仙娘符', fu_zhenzhai: '镇宅大符', candle_1: '安身烛', candle_2: '和缘烛', pouch_juqian: '聚财福袋' };
+    ITEMS.forEach(function (i) { i.glyph = GLYPH[i.sku]; });
+
+    function render() {
+      var root = document.getElementById('catalog');
+      root.innerHTML = '';
+      CATS.forEach(function (c) {
+        var items = ITEMS.filter(function (i) { return i.cat === c.key; });
+        var grid = el('div', { class: 'shop-grid' });
+        items.forEach(function (it) {
+          var visual = el('div', { class: 'card-visual' }, [
+            it.image ? el('img', { src: it.image, alt: it.name, loading: 'lazy' }) : el('span', { class: 'glyph', text: it.glyph }),
+            it.price == null ? el('span', { class: 'soon', text: 'Coming soon' }) : null
+          ]);
+          var body = el('div', { class: 'card-body' }, [
+            el('h3', { text: it.name }),
+            el('p', { class: 'use', text: it.use }),
+            el('p', { class: 'price' + (it.price == null ? ' muted' : ''), text: it.price == null ? 'Price to be announced' : (it.priceLabel || money(it.price)) })
+          ]);
+          if (it.withService) {
+            body.appendChild(el('a', { class: 'link-cta', href: it.withService.href, text: it.withService.label }));
+          } else if (it.price != null) {
+            var q = cart[it.sku] || 0;
+            var minus = el('button', { type: 'button', 'aria-label': 'Fewer ' + it.name, text: '−' });
+            var plus = el('button', { type: 'button', 'aria-label': 'More ' + it.name, text: '+' });
+            minus.disabled = q === 0;
+            plus.disabled = q >= MAX_QTY;
+            minus.onclick = function () { setQty(it.sku, q - 1); };
+            plus.onclick = function () { setQty(it.sku, q + 1); };
+            body.appendChild(el('div', { class: 'qty' }, [minus, el('span', { class: 'n', text: String(q) }), plus]));
+          }
+          grid.appendChild(el('article', { class: 'card', id: it.sku }, [visual, body]));
+        });
+        root.appendChild(el('div', { class: 'shop-cat' }, [el('h2', { text: c.name }), el('p', { class: 'cat-en', text: c.en }), grid]));
+      });
+      renderCart();
+    }
+
+    function setQty(sku, n) {
+      n = Math.max(0, Math.min(MAX_QTY, n));
+      if (n) cart[sku] = n; else delete cart[sku];
+      render();
+    }
+
+    function lines() {
+      return ITEMS.filter(function (i) { return cart[i.sku]; }).map(function (i) { return { item: i, qty: cart[i.sku] }; });
+    }
+
+    function renderCart() {
+      var ls = lines();
+      var count = ls.reduce(function (s, l) { return s + l.qty; }, 0);
+      var total = ls.reduce(function (s, l) { return s + l.qty * l.item.price; }, 0);
+      var bar = document.getElementById('cart-bar');
+      bar.classList.toggle('show', count > 0 && !document.getElementById('checkout').classList.contains('show'));
+      document.getElementById('cart-sum').innerHTML = count + (count === 1 ? ' item' : ' items') + ' <b>' + money(total) + '</b>';
+      var ul = document.getElementById('checkout-lines');
+      ul.innerHTML = '';
+      ls.forEach(function (l) { ul.appendChild(el('li', {}, [el('span', { text: l.item.name + ' × ' + l.qty }), el('span', { text: money(l.qty * l.item.price) })])); });
+      ul.appendChild(el('li', { style: 'border-top:1px solid var(--gray-4);padding-top:8px;font-weight:500;color:var(--plum)' }, [el('span', { text: 'Total' }), el('span', { text: money(total) })]));
+      if (!count) document.getElementById('checkout').classList.remove('show');
+    }
+
+    document.getElementById('cart-go').onclick = function () {
+      var f = document.getElementById('checkout');
+      f.classList.add('show');
+      renderCart();
+      f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    document.getElementById('checkout').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var err = document.getElementById('pay-err');
+      var btn = document.getElementById('pay-btn');
+      var name = document.getElementById('f-name').value.trim();
+      var email = document.getElementById('f-email').value.trim();
+      var note = document.getElementById('f-note').value.trim();
+      err.textContent = '';
+      if (!name) { err.textContent = 'Please enter your name.'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = 'Please enter a valid email.'; return; }
+      var items = Object.keys(cart).map(function (sku) { return { sku: sku, qty: cart[sku] }; });
+      if (!items.length) { err.textContent = 'Your cart is empty.'; return; }
+      btn.disabled = true;
+      btn.textContent = 'Opening payment…';
+      try {
+        var r = await fetch(CHECKOUT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: items, name: name, email: email, note: note, lang: 'en' }) });
+        var d = await r.json().catch(function () { return {}; });
+        if (r.ok && d.url) { window.location.href = d.url; return; }
+        err.textContent = d.error === 'not_for_sale' ? 'Something in your cart isn\'t on sale yet — please refresh and try again.' : d.error === 'rate_limited' ? 'Too many attempts — please wait a moment.' : 'We couldn\'t open payment just now — please try again, or contact us.';
+      } catch (_) {
+        err.textContent = 'Connection trouble — please try again.';
+      }
+      btn.disabled = false;
+      btn.textContent = 'Continue to payment';
+    });
+
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var b = document.getElementById('banner');
+      if (p.get('paid') === '1') {
+        b.innerHTML = '<div class="banner ok">Payment received — thank you! Your order confirmation is in your inbox, and we\'ll let you know when it ships.</div>';
+        var amt = Number(p.get('amt'));
+        if (typeof gtag === 'function' && amt > 0) gtag('event', 'purchase', { transaction_id: p.get('sid') || undefined, value: amt, currency: 'SGD', items: [{ item_name: 'Fortune Lab' }] });
+      } else if (p.get('canceled') === '1') {
+        b.innerHTML = '<div class="banner warn">Payment wasn\'t completed and your cart was cleared. Pick your items again to check out.</div>';
+      }
+    })();
+
+    render();
+  </script>
+  <script src="../assets/site.js?v=202608101630"></script>
+</body>
+</html>
